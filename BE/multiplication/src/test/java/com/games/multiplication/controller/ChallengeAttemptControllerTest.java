@@ -1,5 +1,6 @@
 package com.games.multiplication.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.games.multiplication.challenges.ChallengeAttempt;
 import com.games.multiplication.challenges.ChallengeAttemptDTO;
 import com.games.multiplication.services.ChallengeService;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -16,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.assertj.core.api.BDDAssertions.then;
@@ -26,6 +29,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @ExtendWith(SpringExtension.class)
 @AutoConfigureJsonTesters
 @WebMvcTest(ChallengeAttemptController.class)
+@AutoConfigureMockMvc
 class ChallengeAttemptControllerTest {
 
     @MockBean
@@ -56,14 +60,17 @@ class ChallengeAttemptControllerTest {
         ChallengeAttempt challengeAttempt =
                 new ChallengeAttempt(1L, user, 12, 12, 144, true);
 
+        ObjectMapper objectMapper = new ObjectMapper();
+        String requestBody = objectMapper.writeValueAsString(challengeAttemptDTO);
+
+
         //when
         when(challengeService.verifyAttempt(any())).thenReturn(challengeAttempt);
 
-        MockHttpServletResponse response = mockMvc.perform(post("/attempts")
+        MockHttpServletResponse response = mockMvc.perform(
+                post("/attempts")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonRequestAttempt
-                        .write(challengeAttemptDTO)
-                        .getJson()))
+                .content(requestBody))
                 .andReturn()
                 .getResponse();
 
