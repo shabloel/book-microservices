@@ -1,14 +1,30 @@
 <head>
   <title>A Multiplication Game</title>
 </head>
+
 <div class="container">
   <body>
-    <main>
+    <main class="main">
       <h1>Your new challenge is</h1>
-      <label>
-        Your alias:
-        <input type="text" maxlength="12" name="user" value="" />
-      </label>
+      <form>
+        <label>
+          Your alias:
+          <input type="text" maxlength="12" name="user" value="" />
+        </label>
+
+
+        <p *ngIf="challenge.factorA && challenge.factorB; else elseBlock">{{challenge.factorA}} x {{challenge.factorB}}</p>
+
+        <ng-template #elseBlock>
+          <p>No challenges to show</p>
+        </ng-template>
+
+        <label *ngIf="challenge.factorA && challenge.factorB">
+          <input type="text" name="answer" value="your answer"/>
+        </label>
+
+        <button></button>
+      </form>
     </main>
   </body>
 </div>
