@@ -5,26 +5,67 @@
 <div class="container">
   <body>
     <main class="main">
-      <h1>Your new challenge is</h1>
-      <form>
-        <label>
+      <h1>Multiplication game</h1>
+      <form (ngSubmit)="submitChallenge()" [formGroup]="form" class="form">
+        <label class="label">
           Your alias:
-          <input type="text" maxlength="12" name="user" value="" />
+          <mat-form-field>
+            <input
+              matInput
+              class="input alias"
+              type="text"
+              formControlName="alias"
+            />
+            <mat-error
+              *ngIf="
+                alias?.hasError('required') && (alias?.touched || alias?.dirty)
+              "
+            >
+              Your alias is required
+            </mat-error>
+          </mat-form-field>
         </label>
 
-
-        <p *ngIf="challenge.factorA && challenge.factorB; else elseBlock">{{challenge.factorA}} x {{challenge.factorB}}</p>
+        <p *ngIf="haveChallenge; else elseBlock" class="challenge">
+          {{ challenge.factorA }} x {{ challenge.factorB }}
+        </p>
 
         <ng-template #elseBlock>
           <p>No challenges to show</p>
         </ng-template>
 
-        <label *ngIf="challenge.factorA && challenge.factorB">
-          <input type="text" name="answer" value="your answer"/>
+        <label *ngIf="challenge" class="label">
+          Your guess:
+          <mat-form-field>
+            <input
+              matInput
+              class="input guess"
+              type="text"
+              formControlName="guess"
+            />
+            <mat-error
+              *ngIf="
+                guess?.hasError('required') && (guess?.touched || guess?.dirty)
+              "
+            >
+              Guess is required
+            </mat-error>
+            <mat-error
+              *ngIf="guess?.hasError('min') && (guess?.touched || guess?.dirty)"
+            >
+              Guess should be at least zero
+            </mat-error>
+          </mat-form-field>
         </label>
 
-        <button></button>
+        <button type="submit" [disabled]="form.invalid" class="button">
+          Submit
+        </button>
       </form>
+
+      <div *ngIf="success" class="notification is-success">
+        Answer submitted!
+      </div>
     </main>
   </body>
 </div>
