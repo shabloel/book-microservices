@@ -3,6 +3,7 @@
 </head>
 
 <div class="container">
+
   <body>
     <main class="main">
       <h1>Multiplication game</h1>
@@ -10,17 +11,10 @@
         <label class="label">
           Your alias:
           <mat-form-field>
-            <input
-              matInput
-              class="input alias"
-              type="text"
-              formControlName="alias"
-            />
-            <mat-error
-              *ngIf="
+            <input matInput class="input alias" type="text" formControlName="alias" />
+            <mat-error *ngIf="
                 alias?.hasError('required') && (alias?.touched || alias?.dirty)
-              "
-            >
+              ">
               Your alias is required
             </mat-error>
           </mat-form-field>
@@ -34,31 +28,21 @@
           <p>No challenges to show</p>
         </ng-template>
 
-        <label *ngIf="challenge" class="label">
-          Your guess:
-          <mat-form-field>
-            <input
-              matInput
-              class="input guess"
-              type="text"
-              formControlName="guess"
-            />
-            <mat-error
-              *ngIf="
-                guess?.hasError('required') && (guess?.touched || guess?.dirty)
-              "
-            >
-              Guess is required
-            </mat-error>
-            <mat-error
-              *ngIf="guess?.hasError('min') && (guess?.touched || guess?.dirty)"
-            >
-              Guess should be at least zero
-            </mat-error>
-          </mat-form-field>
-        </label>
 
-        <button type="submit" [disabled]="form.invalid" class="button">
+        <mat-form-field class="input guess">
+          <mat-label *ngIf="challenge" class="label">
+            Your guess:
+          </mat-label>
+          <input matInput type="number" formControlName="guess" />
+          <mat-error *ngIf="guess?.hasError('required') && (guess?.touched || guess?.dirty)">
+            Guess is required
+          </mat-error>
+          <mat-error *ngIf="guess?.hasError('min') && (guess?.touched || guess?.dirty)">
+            Guess should be at least zero
+          </mat-error>
+        </mat-form-field>
+
+        <button mat-button type="submit" [disabled]="form.invalid" class="button">
           Submit
         </button>
       </form>

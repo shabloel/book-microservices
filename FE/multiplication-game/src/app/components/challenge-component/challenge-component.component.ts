@@ -42,24 +42,29 @@ export class ChallengeComponentComponent implements OnInit {
       .subscribe((result) => {
         if (result.correct) {
           this.updateMessage('Congratulations, your guess is correct!');
+          console.log("field", this.form.value.guess);
         } else {
           this.updateMessage(
             'Oops! Your guess ' +
-              result.resultAttempt +
-              ' is wrong, but keep playing!'
-          );
-        }
-      });
+            result.resultAttempt +
+            ' is wrong, but keep playing!'
+            );
+          }
+        });
+        this.getChallenge()
+        this.clearInputFieldGuess();
   }
 
   private getChallenge() {
     this.challengeService.getChallenge().subscribe(
       (result) => {
         this.challenge = result;
+        console.log("new challenge: ", this.challenge);
         this.haveChallenge = true;
       },
       (error) => {
         console.error('Could not reach the server.');
+        this.haveChallenge = false;
       }
     );
   }
@@ -79,6 +84,11 @@ export class ChallengeComponentComponent implements OnInit {
       alias: ['', [Validators.required, Validators.maxLength(12)]],
       guess: ['', [Validators.required, Validators.min(0)]],
     });
+  }
+
+  private clearInputFieldGuess(): void {
+    this.form.get('guess')?.setValue('');
+    this.form.get('guess')?.markAsPristine();
   }
 
   private updateMessage(message: string) {
