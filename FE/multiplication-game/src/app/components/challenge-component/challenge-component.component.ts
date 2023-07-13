@@ -1,10 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Challenge } from 'src/app/dtos/challenge';
 import { ChallengeAttemptDto } from 'src/app/dtos/challenge-attempt-dto';
 import { ChallengeServiceService } from 'src/app/services/challenge-service.service';
@@ -20,6 +15,7 @@ export class ChallengeComponentComponent implements OnInit {
   challenge: Challenge = new Challenge();
   loading = false;
   success = false;
+  message: string;
 
   constructor(
     private challengeService: ChallengeServiceService,
@@ -30,6 +26,33 @@ export class ChallengeComponentComponent implements OnInit {
 
   ngOnInit(): void {
     this.formBuild();
+    this.getChallenge();
+  }
+
+  async submitChallenge() {
+    this.loading = true;
+    const challengeAttempt = this.createChallengeAttempt();
+    this.sentChallenge(challengeAttempt);
+    this.loading = false;
+  }
+
+  private sentChallenge(challengeAttempt: ChallengeAttemptDto) {
+    this.challengeService
+      .sendChallenge(challengeAttempt)
+      .subscribe((result) => {
+        if (result.correct) {
+          this.updateMessage('Congratulations, your guess is correct!');
+        } else {
+          this.updateMessage(
+            'Oops! Your guess ' +
+              result.resultAttempt +
+              ' is wrong, but keep playing!'
+          );
+        }
+      });
+  }
+
+  private getChallenge() {
     this.challengeService.getChallenge().subscribe(
       (result) => {
         this.challenge = result;
@@ -41,18 +64,14 @@ export class ChallengeComponentComponent implements OnInit {
     );
   }
 
-  async submitChallenge() {
-    this.loading = true;
+  private createChallengeAttempt(): ChallengeAttemptDto {
     const formValue = this.form.value;
     const challengeAttempt = new ChallengeAttemptDto();
     challengeAttempt.factorA = this.challenge.factorA;
     challengeAttempt.factorB = this.challenge.factorB;
-    challengeAttempt.guess = formValue.answer;
-    challengeAttempt.userAlias = formValue.name;
-
-    this.challengeService
-      .sendChallenge(challengeAttempt)
-      .subscribe((result) => {});
+    challengeAttempt.guess = formValue.guess;
+    challengeAttempt.userAlias = formValue.alias;
+    return challengeAttempt;
   }
 
   private formBuild() {
@@ -60,6 +79,10 @@ export class ChallengeComponentComponent implements OnInit {
       alias: ['', [Validators.required, Validators.maxLength(12)]],
       guess: ['', [Validators.required, Validators.min(0)]],
     });
+  }
+
+  private updateMessage(message: string) {
+    this.message = message;
   }
 
   get alias() {
