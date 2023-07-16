@@ -1,6 +1,6 @@
 package com.games.multiplication.services;
 
-import com.games.multiplication.challenges.Challenge;
+import com.games.multiplication.domain.model.Challenge;
 
 public interface  ChallengeGeneratorService {
 

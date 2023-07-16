@@ -1,6 +1,6 @@
 package com.games.multiplication.controller;
 
-import com.games.multiplication.challenges.Challenge;
+import com.games.multiplication.domain.model.Challenge;
 import com.games.multiplication.services.ChallengeGeneratorService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.GetMapping;

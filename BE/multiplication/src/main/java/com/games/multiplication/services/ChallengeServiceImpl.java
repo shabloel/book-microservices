@@ -1,8 +1,7 @@
 package com.games.multiplication.services;
 
-import com.games.multiplication.challenges.ChallengeAttempt;
-import com.games.multiplication.challenges.ChallengeAttemptDTO;
-import com.games.multiplication.users.User;
+import com.games.multiplication.domain.model.ChallengeAttempt;
+import com.games.multiplication.domain.model.ChallengeAttemptDTO;
 import org.springframework.stereotype.Service;
 
 @Service

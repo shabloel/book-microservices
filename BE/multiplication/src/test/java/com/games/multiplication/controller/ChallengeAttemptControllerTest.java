@@ -1,10 +1,9 @@
 package com.games.multiplication.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.games.multiplication.challenges.ChallengeAttempt;
-import com.games.multiplication.challenges.ChallengeAttemptDTO;
+import com.games.multiplication.domain.model.ChallengeAttempt;
+import com.games.multiplication.domain.model.ChallengeAttemptDTO;
 import com.games.multiplication.services.ChallengeService;
-import com.games.multiplication.users.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,7 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.assertj.core.api.BDDAssertions.then;

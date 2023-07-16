@@ -1,6 +1,6 @@
 package com.games.multiplication.services;
 
-import com.games.multiplication.challenges.Challenge;
+import com.games.multiplication.domain.model.Challenge;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

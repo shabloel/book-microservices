@@ -1,7 +1,7 @@
 package com.games.multiplication.controller;
 
-import com.games.multiplication.challenges.ChallengeAttempt;
-import com.games.multiplication.challenges.ChallengeAttemptDTO;
+import com.games.multiplication.domain.model.ChallengeAttempt;
+import com.games.multiplication.domain.model.ChallengeAttemptDTO;
 import com.games.multiplication.services.ChallengeService;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
