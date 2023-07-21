@@ -11,14 +11,14 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class Uzer {
 
     @Id
     @GeneratedValue
     private Long id;
     private String alias;
 
-    public User(final String userAlias) {
+    public Uzer(final String userAlias) {
         this(null, userAlias);
     }
 

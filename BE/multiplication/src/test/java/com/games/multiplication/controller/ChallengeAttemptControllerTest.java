@@ -2,7 +2,8 @@ package com.games.multiplication.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.games.multiplication.domain.model.ChallengeAttempt;
-import com.games.multiplication.domain.model.ChallengeAttemptDTO;
+import com.games.multiplication.domain.dto.ChallengeAttemptDTO;
+import com.games.multiplication.domain.model.Uzer;
 import com.games.multiplication.services.ChallengeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,7 +51,7 @@ class ChallengeAttemptControllerTest {
     @Test
     void postValidChallengeAttempt() throws Exception {
         //given
-        User user = new User(1L, "Henkie");
+        Uzer user = new Uzer(1L, "Henkie");
 
         ChallengeAttemptDTO challengeAttemptDTO =
                 new ChallengeAttemptDTO(12, 12, "Henkie", 144);
@@ -80,7 +81,7 @@ class ChallengeAttemptControllerTest {
     @Test
     void postInvalidChallengeAttempt() throws Exception {
         //given
-        User user = new User(1L, "Henkie");
+        Uzer user = new Uzer(1L, "Henkie");
 
         ChallengeAttemptDTO challengeAttemptDTO =
                 new ChallengeAttemptDTO(1200, -12, "Henkie", -150);

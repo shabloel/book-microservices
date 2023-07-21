@@ -1,15 +1,14 @@
 package com.games.multiplication.controller;
 
+import com.games.multiplication.domain.dto.ChallengeAttemptDTO;
 import com.games.multiplication.domain.model.ChallengeAttempt;
-import com.games.multiplication.domain.model.ChallengeAttemptDTO;
 import com.games.multiplication.services.ChallengeService;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Log4j2
 @RestController
@@ -30,6 +29,16 @@ public class ChallengeAttemptController {
         ChallengeAttempt challengeAttempt = challengeService.verifyAttempt(challengeAttemptDTO);
 
         return ResponseEntity.ok(challengeAttempt);
+    }
+
+    @GetMapping
+    ResponseEntity<List<ChallengeAttempt>> getUserStats(@RequestParam("alias") String alias) {
+
+        log.info("Get request received fot the last 10 attempts for usr [{}]", alias);
+
+        List<ChallengeAttempt> result = challengeService.getUserStats(alias);
+
+        return ResponseEntity.ok(result);
     }
 
 

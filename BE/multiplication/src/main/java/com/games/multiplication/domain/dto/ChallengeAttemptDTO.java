@@ -1,4 +1,4 @@
-package com.games.multiplication.domain.model;
+package com.games.multiplication.domain.dto;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

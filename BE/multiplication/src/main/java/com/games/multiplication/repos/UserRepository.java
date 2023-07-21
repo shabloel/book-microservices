@@ -1,11 +1,13 @@
 package com.games.multiplication.repos;
 
-import com.games.multiplication.domain.model.User;
+import com.games.multiplication.domain.model.Uzer;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-public interface UserRepository extends CrudRepository<User, Long> {
+@Repository
+public interface UserRepository extends CrudRepository<Uzer, Long> {
 
-    Optional<User> findByAlias(final String alias);
+    Optional<Uzer> findByAlias(final String alias);
 }
