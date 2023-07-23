@@ -7,15 +7,13 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class ChallengeServiceService {
-  private static SERVER_URL = `http://localhost:8080`;
+  private static SERVER_URL = `http://localhost:8090`;
   private static POST_CHALLENGE_URL = `/attempts`;
   private static GET_CHALLENGE_URL = `/challenges/random`;
 
   constructor(private httpClient: HttpClient) {}
 
   sendChallenge(challengeAttempt: ChallengeAttemptDto): Observable<any> {
-    const url = `http://localhost:8080/attempts`;
-
     return this.httpClient.post(
       ChallengeServiceService.SERVER_URL +
         ChallengeServiceService.POST_CHALLENGE_URL,
