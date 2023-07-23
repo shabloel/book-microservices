@@ -1,22 +1,28 @@
 package com.games.multiplication.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
+
 @Getter
 @ToString
-@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class ChallengeAttempt {
+@Data
+@JsonIgnoreProperties({"HibernateLazyInitializer", "handler"})
+public class ChallengeAttempt implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID")
+    @JoinColumn(name = "UZER_ID")
     private Uzer uzer;
     private int factorA;
     private int factorB;

@@ -17,7 +17,6 @@ public class ChallengeAttemptController {
 
     private final ChallengeService challengeService;
 
-
     public ChallengeAttemptController(ChallengeService challengeService) {
         this.challengeService = challengeService;
     }
@@ -25,20 +24,15 @@ public class ChallengeAttemptController {
     @PostMapping
     ResponseEntity<ChallengeAttempt> postAChallengeAttempt(@RequestBody @Valid ChallengeAttemptDTO challengeAttemptDTO) {
         log.info("Received a request from client with the following attempt: [{}]", challengeAttemptDTO);
-
         ChallengeAttempt challengeAttempt = challengeService.verifyAttempt(challengeAttemptDTO);
-
         return ResponseEntity.ok(challengeAttempt);
     }
 
     @GetMapping
     ResponseEntity<List<ChallengeAttempt>> getUserStats(@RequestParam("alias") String alias) {
-
         log.info("Get request received fot the last 10 attempts for usr [{}]", alias);
 
-        List<ChallengeAttempt> result = challengeService.getUserStats(alias);
-
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(challengeService.getUserStats(alias));
     }
 
 
