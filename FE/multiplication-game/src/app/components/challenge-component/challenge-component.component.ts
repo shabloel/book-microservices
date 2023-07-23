@@ -1,8 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { DataSource } from '@angular/cdk/collections';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { Observable, Subject, concatMap, tap } from 'rxjs';
 import { Challenge } from 'src/app/dtos/challenge';
+import { ChallengeAttempt } from 'src/app/dtos/challenge-attempt';
 import { ChallengeAttemptDto } from 'src/app/dtos/challenge-attempt-dto';
 import { ChallengeServiceService } from 'src/app/services/challenge-service.service';
+import { ObservablesService } from 'src/app/services/observables.service';
 
 @Component({
   selector: 'app-challenge-component',
@@ -16,10 +22,12 @@ export class ChallengeComponentComponent implements OnInit {
   loading = false;
   success = false;
   message: string;
+  challengeAttempt: ChallengeAttempt;
 
   constructor(
     private challengeService: ChallengeServiceService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private observableService: ObservablesService
   ) {
     this.haveChallenge = false;
   }
@@ -39,22 +47,29 @@ export class ChallengeComponentComponent implements OnInit {
   private sentChallenge(challengeAttempt: ChallengeAttemptDto) {
     this.challengeService
       .sendChallenge(challengeAttempt)
-      .subscribe((result) => {
-        if (result.correct) {
-          this.updateMessage('Congratulations, your guess is correct!');
-        } else {
-          this.updateMessage('Oops! Your guess is wrong, but keep playing!');
-        }
+      .pipe(
+        tap((result) => {
+          this.challengeAttempt = result;
+          if (result.correct) {
+            this.updateMessage('Congratulations, your guess is correct!');
+          } else {
+            this.updateMessage('Oops! Your guess is wrong, but keep playing!');
+          }
+        })
+      )
+      .subscribe(() => {
+        this.observableService.sentChallengeAttemptToUserStats(
+          challengeAttempt
+        );
+        this.getChallenge();
+        this.clearInputFieldGuess();
       });
-    this.getChallenge();
-    this.clearInputFieldGuess();
   }
 
   private getChallenge() {
     this.challengeService.getChallenge().subscribe(
       (result) => {
         this.challenge = result;
-        console.log('new challenge: ', this.challenge);
         this.haveChallenge = true;
       },
       (error) => {

@@ -1,18 +1,26 @@
 .root {
-  display: flex;
+  display: grid;
   min-height: 100vh;
+  grid-template-columns: 450px 400px 400px;
   justify-content: center;
   align-items: center;
   height: 100%;
+  gap: 5rem;
+}
+
+.table {
+  align-self: start;
+  margin-top: 18rem;
 }
 
 .container {
   background-color: #282c34;
-  min-height: 30rem;
+  min-height: 45rem;
   min-width: 30rem;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  gap: 5rem;
 }

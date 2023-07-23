@@ -12,9 +12,12 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { UserStatsComponent } from './components/user-stats/user-stats.component';
 
 @NgModule({
-  declarations: [AppComponent, ChallengeComponentComponent],
+  declarations: [AppComponent, ChallengeComponentComponent, UserStatsComponent],
   imports: [
     BrowserModule,
     FormsModule,
@@ -26,7 +29,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatCheckboxModule,
     MatChipsModule,
     BrowserAnimationsModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatTableModule,
+    MatPaginatorModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

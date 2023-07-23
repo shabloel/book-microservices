@@ -7,9 +7,10 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class ChallengeServiceService {
-  private static SERVER_URL = `http://localhost:8090`;
-  private static POST_CHALLENGE_URL = `/attempts`;
-  private static GET_CHALLENGE_URL = `/challenges/random`;
+  static SERVER_URL = `http://localhost:8090`;
+  static POST_CHALLENGE_URL = `/attempts`;
+  static GET_CHALLENGE_URL = `/challenges/random`;
+  static GET_ATTEMPTS_BY_ALIAS = `/attempts?alias=`;
 
   constructor(private httpClient: HttpClient) {}
 
@@ -25,6 +26,14 @@ export class ChallengeServiceService {
     return this.httpClient.get(
       ChallengeServiceService.SERVER_URL +
         ChallengeServiceService.GET_CHALLENGE_URL
+    );
+  }
+
+  getAttempts(alias: string): Observable<any> {
+    return this.httpClient.get(
+      ChallengeServiceService.SERVER_URL +
+        ChallengeServiceService.GET_ATTEMPTS_BY_ALIAS +
+        alias
     );
   }
 }
