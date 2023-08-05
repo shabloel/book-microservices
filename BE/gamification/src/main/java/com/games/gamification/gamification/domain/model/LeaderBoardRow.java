@@ -12,8 +12,8 @@ import java.util.List;
 @AllArgsConstructor
 public class LeaderBoardRow {
 
-    Long userId,
-    Long totalScore,
+    Long userId;
+    Long totalScore;
 
     @With
     List<String> badges;
