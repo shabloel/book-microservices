@@ -2,7 +2,7 @@ package com.games.multiplication.services;
 
 import com.games.multiplication.domain.model.Challenge;
 
-public interface  ChallengeGeneratorService {
+public interface ChallengeGeneratorService {
 
     /**
      *

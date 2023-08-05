@@ -6,7 +6,6 @@ import com.games.gamification.gamification.domain.model.BadgeType;
 import com.games.gamification.gamification.domain.model.ScoreCard;
 import com.games.gamification.gamification.repositories.BadgeRepo;
 import com.games.gamification.gamification.repositories.ScoreCardRepo;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -69,7 +68,7 @@ public class GameServiceImpl implements GameService {
 
         List<ScoreCard> scoreCardList = scoreCardRepo.findByUserIdOrderByScoreTimestampDesc(challenge.getUserId());
         Set<BadgeType> alreadyGotBadges = badgeRepo
-                .findByUserIdOOrderByBadgeTimestampBadgeTimestampDesc(challenge.getUserId())
+                .findByUserIdOrderByBadgeTimestampBadgeTimestampDesc(challenge.getUserId())
                 .stream()
                 .map(BadgeCard::getBadgeType)
                 .collect(Collectors.toSet());
