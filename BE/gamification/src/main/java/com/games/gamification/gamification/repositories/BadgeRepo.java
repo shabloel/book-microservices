@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface BadgeRepo extends CrudRepository<BadgeCard, Long> {
 
-    List<BadgeCard> findByUserIdOrderByBadgeTimestampBadgeTimestampDesc(Long id);
+    List<BadgeCard> findByUserIdOrderByBadgeTimestampDesc(final Long id);
 }

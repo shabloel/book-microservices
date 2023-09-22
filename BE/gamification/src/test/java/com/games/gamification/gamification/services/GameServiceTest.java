@@ -1,42 +1,41 @@
 package com.games.gamification.gamification.services;
 
-import com.games.gamification.gamification.domain.dto.ChallengeSolvedDto;
+import com.games.gamification.gamification.domain.dto.Attempt;
+import com.games.gamification.gamification.domain.model.BadgeCard;
 import com.games.gamification.gamification.domain.model.BadgeType;
+import com.games.gamification.gamification.domain.model.ScoreCard;
 import com.games.gamification.gamification.repositories.BadgeRepo;
 import com.games.gamification.gamification.repositories.ScoreCardRepo;
-import com.games.gamification.gamification.testhelpers.CreateEntities;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.BDDAssertions.then;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class GameServiceTest {
 
-    GameService classUnderTest;
+    private GameService classUnderTest;
 
     @Mock
-    ScoreCardRepo scoreCardRepo;
+    private ScoreCardRepo scoreCardRepo;
 
     @Mock
-    BadgeRepo badgeRepo;
+    private BadgeRepo badgeRepo;
 
     @Mock
-    List<BadgeProcessor> badgeProcessors;
+    private BadgeProcessor badgeProcessor;
 
     @BeforeEach
     void setUp() {
-        classUnderTest = new GameServiceImpl(badgeRepo, scoreCardRepo, badgeProcessors);
+        classUnderTest = new GameServiceImpl(badgeRepo, scoreCardRepo, List.of(badgeProcessor));
     }
 
     @Test
@@ -48,23 +47,39 @@ class GameServiceTest {
         //then
         then(result).isEqualTo(Optional.empty());
     }
+
     @Test
     void newAttemptFromUser_Correct_Attempt() {
         //given
-        List<BadgeType> badgeTypes = List.of(BadgeType.FIRST_WON);
-        ChallengeSolvedDto challengeSolvedDto = new ChallengeSolvedDto(
-                1, true, 12, 12, 1, "Henk");
+        Long userId = 1L, attemptId = 1L;
+        String userAlias = "Henk";
+        var attempt = new Attempt(
+                attemptId, true, 20, 70, userId, userAlias);
+        ScoreCard scoreCard = new ScoreCard(userId, attemptId);
 
         //when
-        when(scoreCardRepo.save(any())).thenReturn(Collections.emptyList());
-        when(scoreCardRepo.getTotalScoreForUser(anyLong())).thenReturn(Optional.of(50));
-        when(scoreCardRepo.findByUserIdOrderByScoreTimestampDesc(anyLong())).thenReturn(CreateEntities.createListOfScoreCards(1));
-        when(badgeRepo.findByUserIdOrderByBadgeTimestampBadgeTimestampDesc(anyLong())).thenReturn(CreateEntities.createListOfBadgecards(1));
-        Optional<GameService.GameResult> result = classUnderTest.newAttemptFromUser(challengeSolvedDto);
+        when(scoreCardRepo.getTotalScoreForUser(userId)).thenReturn(Optional.of(10));
+        when(scoreCardRepo.findByUserIdOrderByScoreTimestampDesc(userId)).thenReturn(List.of(scoreCard));
+        when(badgeRepo.findByUserIdOrderByBadgeTimestampDesc(userId)).thenReturn(List.of(new BadgeCard(userId, BadgeType.FIRST_WON)));
+        when(badgeProcessor.badgeType()).thenReturn(BadgeType.LUCKY_NUMBER);
+        when(badgeProcessor.processForOptionalBadge(10, List.of(scoreCard), attempt)).thenReturn(Optional.of(BadgeType.LUCKY_NUMBER));
+
+        final Optional<GameService.GameResult> result = classUnderTest.newAttemptFromUser(attempt);
 
         //then
-        then(result).isEqualTo(new GameService.GameResult(10, badgeTypes ));
+        then(result).isEqualTo(Optional.of(new GameService.GameResult(10, List.of(BadgeType.LUCKY_NUMBER))));
+        verify(scoreCardRepo).save(scoreCard);
+        verify(badgeRepo).saveAll(List.of(new BadgeCard(userId, BadgeType.LUCKY_NUMBER)));
     }
 
-
+    @Test
+    void newAttemptFromUser_InCorrect_Attempt() {
+        //given
+        Long userId = 1L, attemptId = 1L;
+        String userAlias = "Henk";
+        var attempt = new Attempt(
+                attemptId, false, 20, 70, userId, userAlias);
+        Optional<GameService.GameResult> result = classUnderTest.newAttemptFromUser(attempt);
+        then(result).isEqualTo(Optional.of(new GameService.GameResult(0, List.of())));
+    }
 }

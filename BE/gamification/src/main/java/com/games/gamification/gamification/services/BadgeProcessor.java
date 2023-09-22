@@ -1,6 +1,6 @@
 package com.games.gamification.gamification.services;
 
-import com.games.gamification.gamification.domain.dto.ChallengeSolvedDto;
+import com.games.gamification.gamification.domain.dto.Attempt;
 import com.games.gamification.gamification.domain.model.BadgeType;
 import com.games.gamification.gamification.domain.model.ScoreCard;
 
@@ -11,7 +11,7 @@ public interface BadgeProcessor {
 
     Optional<BadgeType> processForOptionalBadge(int currentScore,
                                                 List<ScoreCard> scoreCards,
-                                                ChallengeSolvedDto challenge);
+                                                Attempt challenge);
 
     BadgeType badgeType();
 }

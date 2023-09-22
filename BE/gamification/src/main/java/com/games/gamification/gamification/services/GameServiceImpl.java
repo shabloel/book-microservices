@@ -1,6 +1,6 @@
 package com.games.gamification.gamification.services;
 
-import com.games.gamification.gamification.domain.dto.ChallengeSolvedDto;
+import com.games.gamification.gamification.domain.dto.Attempt;
 import com.games.gamification.gamification.domain.model.BadgeCard;
 import com.games.gamification.gamification.domain.model.BadgeType;
 import com.games.gamification.gamification.domain.model.ScoreCard;
@@ -30,7 +30,7 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public Optional<GameResult> newAttemptFromUser(final ChallengeSolvedDto challenge) {
+    public Optional<GameResult> newAttemptFromUser(final Attempt challenge) {
         if (challenge == null) {
             return Optional.empty();
         }
@@ -52,32 +52,32 @@ public class GameServiceImpl implements GameService {
                     .map(BadgeCard::getBadgeType)
                     .collect(Collectors.toList())));
         } else {
-            log.info("Attempt id {} is not correct, user {} does not get any points.", challenge.getAttemptId(),  challenge.getUserAlias());
+            log.info("Attempt id {} is not correct, user {} does not get any points.", challenge.getAttemptId(), challenge.getUserAlias());
             return Optional.of(new GameResult(0, List.of()));
         }
     }
 
-    private List<BadgeCard> processForBadges(ChallengeSolvedDto challenge) {
+    private List<BadgeCard> processForBadges(Attempt attempt) {
 
-        Optional<Integer> optTotalScore = scoreCardRepo.getTotalScoreForUser(challenge.getUserId());
+        Optional<Integer> optTotalScore = scoreCardRepo.getTotalScoreForUser(attempt.getUserId());
 
-        if(optTotalScore.isEmpty()){
+        if (optTotalScore.isEmpty()) {
             return Collections.emptyList();
         }
         int totalScore = optTotalScore.get();
 
-        List<ScoreCard> scoreCardList = scoreCardRepo.findByUserIdOrderByScoreTimestampDesc(challenge.getUserId());
+        List<ScoreCard> scoreCardList = scoreCardRepo.findByUserIdOrderByScoreTimestampDesc(attempt.getUserId());
         Set<BadgeType> alreadyGotBadges = badgeRepo
-                .findByUserIdOrderByBadgeTimestampBadgeTimestampDesc(challenge.getUserId())
+                .findByUserIdOrderByBadgeTimestampDesc(attempt.getUserId())
                 .stream()
                 .map(BadgeCard::getBadgeType)
                 .collect(Collectors.toSet());
 
         List<BadgeCard> newBadgeCards = badgeProcessors.stream()
                 .filter(bp -> !alreadyGotBadges.contains(bp.badgeType()))
-                .map(bp -> bp.processForOptionalBadge(totalScore, scoreCardList, challenge))
+                .map(bp -> bp.processForOptionalBadge(totalScore, scoreCardList, attempt))
                 .flatMap(Optional::stream)
-                .map(bt -> new BadgeCard(challenge.getUserId(), bt))
+                .map(bt -> new BadgeCard(attempt.getUserId(), bt))
                 .collect(Collectors.toList());
 
         badgeRepo.saveAll(newBadgeCards);

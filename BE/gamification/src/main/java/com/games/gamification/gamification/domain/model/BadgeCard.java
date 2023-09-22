@@ -17,15 +17,12 @@ public class BadgeCard {
     @Id
     @GeneratedValue
     private Long id;
-
     private Long userId;
-
     @EqualsAndHashCode.Exclude
     private long badgeTimestamp;
-
     private BadgeType badgeType;
 
-    public BadgeCard(final Long userId, final BadgeType badgeType){
+    public BadgeCard(final Long userId, final BadgeType badgeType) {
         this(null, userId, System.currentTimeMillis(), badgeType);
     }
 }

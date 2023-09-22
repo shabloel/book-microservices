@@ -4,12 +4,11 @@ import com.games.gamification.gamification.domain.model.BadgeCard;
 import com.games.gamification.gamification.domain.model.BadgeType;
 import com.games.gamification.gamification.domain.model.ScoreCard;
 
-import java.util.Iterator;
 import java.util.List;
 
 public class CreateEntities {
 
-    public static List<ScoreCard> createListOfScoreCards(final int i) {
+    public static List<ScoreCard> createListOfScoreCards() {
         List.of(createScoreCard(true));
         return null;
     }
@@ -22,15 +21,16 @@ public class CreateEntities {
         }
     }
 
-    public static List<BadgeCard> createListOfBadgecards(final int i) {
-        return List.of(createBadgeCard(true));
+    public static List<BadgeCard> createListOfBadgecardsFirstWon() {
+        return List.of(createBadgeCardFirstWon(true));
     }
 
-    public static BadgeCard createBadgeCard(final boolean hasId) {
+    public static BadgeCard createBadgeCardFirstWon(final boolean hasId) {
         if (hasId) {
-            return new BadgeCard(1L, 1L, System.currentTimeMillis(), BadgeType.BRONZE);
+            return new BadgeCard(1L, 1L, System.currentTimeMillis(), BadgeType.FIRST_WON);
         } else {
-            return new BadgeCard(1L, BadgeType.BRONZE);
+            return new BadgeCard(1L, BadgeType.FIRST_WON);
         }
     }
+
 }

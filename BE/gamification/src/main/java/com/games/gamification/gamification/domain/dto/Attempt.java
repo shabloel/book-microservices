@@ -3,7 +3,7 @@ package com.games.gamification.gamification.domain.dto;
 import lombok.Value;
 
 @Value
-public class ChallengeSolvedDto {
+public class Attempt {
 
     private long attemptId;
     private boolean correct;
