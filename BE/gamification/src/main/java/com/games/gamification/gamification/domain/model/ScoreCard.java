@@ -22,7 +22,7 @@ public class ScoreCard {
     private Long userId;
     private Long attemptId;
     @EqualsAndHashCode.Exclude
-    private long scoreTimeStamp;
+    private long scoreTimestamp;
     private int score;
 
     public ScoreCard(final Long userId, final Long attemptId) {

@@ -6,6 +6,7 @@ import com.games.gamification.gamification.domain.model.BadgeType;
 import com.games.gamification.gamification.domain.model.ScoreCard;
 import com.games.gamification.gamification.repositories.BadgeRepo;
 import com.games.gamification.gamification.repositories.ScoreCardRepo;
+import com.games.gamification.gamification.services.badges.BadgeProcessor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

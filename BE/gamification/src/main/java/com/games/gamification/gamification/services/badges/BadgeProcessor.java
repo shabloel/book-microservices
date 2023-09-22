@@ -1,4 +1,4 @@
-package com.games.gamification.gamification.services;
+package com.games.gamification.gamification.services.badges;
 
 import com.games.gamification.gamification.domain.dto.Attempt;
 import com.games.gamification.gamification.domain.model.BadgeType;

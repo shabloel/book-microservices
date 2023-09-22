@@ -1,4 +1,4 @@
-package com.games.gamification.gamification.services;
+package com.games.gamification.gamification.services.badges;
 
 import com.games.gamification.gamification.domain.dto.Attempt;
 import com.games.gamification.gamification.domain.model.BadgeType;
@@ -9,15 +9,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class FirstTimeBadgeProcessor implements BadgeProcessor {
-
+public class GoldBadgeProcessor implements BadgeProcessor {
     @Override
     public Optional<BadgeType> processForOptionalBadge(int currentScore, List<ScoreCard> scoreCards, Attempt challenge) {
-        return scoreCards.size() == 1 ? Optional.of(BadgeType.FIRST_WON) : Optional.empty();
+        return currentScore > 400 ? Optional.of(BadgeType.GOLD) : Optional.empty();
     }
 
     @Override
     public BadgeType badgeType() {
-        return BadgeType.FIRST_WON;
+        return BadgeType.GOLD;
     }
 }

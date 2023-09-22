@@ -6,6 +6,7 @@ import com.games.gamification.gamification.domain.model.BadgeType;
 import com.games.gamification.gamification.domain.model.ScoreCard;
 import com.games.gamification.gamification.repositories.BadgeRepo;
 import com.games.gamification.gamification.repositories.ScoreCardRepo;
+import com.games.gamification.gamification.services.badges.BadgeProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
