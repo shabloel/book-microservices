@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.Value;
 
 @Value
-public class ChallengeAttemptDTO {
+public class AttemptDTO {
 
     @Min(1) @Max(99)
     int factorA, factorB;

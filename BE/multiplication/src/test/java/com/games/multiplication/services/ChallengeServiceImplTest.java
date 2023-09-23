@@ -1,7 +1,8 @@
 package com.games.multiplication.services;
 
-import com.games.multiplication.domain.model.ChallengeAttempt;
-import com.games.multiplication.domain.dto.ChallengeAttemptDTO;
+import com.games.multiplication.domain.dto.AttemptCheckedDto;
+import com.games.multiplication.domain.model.Attempt;
+import com.games.multiplication.domain.dto.AttemptDTO;
 import com.games.multiplication.domain.model.Uzer;
 import com.games.multiplication.repos.ChallengeAttemptRepository;
 import com.games.multiplication.repos.UserRepository;
@@ -48,33 +49,42 @@ class ChallengeServiceImplTest {
     void verifyCorrectAttempt() {
 
         //given
-        ChallengeAttemptDTO challengeAttemptDTO =
-                new ChallengeAttemptDTO(12, 12, "Henkie", 144);
+        AttemptDTO attemptDTO =
+                new AttemptDTO(12, 12, "Henkie", 144);
 
         //when
-        ChallengeAttempt challengeAttempt = classUnderTest.verifyAttempt(challengeAttemptDTO);
+        Attempt attempt = classUnderTest.verifyAttempt(attemptDTO);
+
+        AttemptCheckedDto attemptCheckedDto = new AttemptCheckedDto(
+                attempt.getId(),
+                attempt.isCorrect(),
+                attempt.getFactorA(),
+                attempt.getFactorB(),
+                attempt.getUzer().getId(),
+                attempt.getUzer().getAlias()
+        );
 
         //then
-        then(challengeAttempt.isCorrect()).isTrue();
+        then(attempt.isCorrect()).isTrue();
         verify(userRepository).save(new Uzer("Henkie"));
-        verify(challengeAttemptRepository).save(challengeAttempt);
-        verify(gamificationServiceClient).sendAttempt(challengeAttempt);
+        verify(challengeAttemptRepository).save(attempt);
+        verify(gamificationServiceClient).sendAttempt(attemptCheckedDto);
     }
 
     @Test
     void verifyWrongAttempt() {
 
         //given
-        ChallengeAttemptDTO challengeAttemptDTO =
-                new ChallengeAttemptDTO(12, 12, "Henkie", 112);
+        AttemptDTO attemptDTO =
+                new AttemptDTO(12, 12, "Henkie", 112);
 
         //when
-        ChallengeAttempt challengeAttempt = classUnderTest.verifyAttempt(challengeAttemptDTO);
+        Attempt attempt = classUnderTest.verifyAttempt(attemptDTO);
 
         //then
-        then(challengeAttempt.isCorrect()).isFalse();
+        then(attempt.isCorrect()).isFalse();
         verify(userRepository).save(new Uzer("Henkie"));
-        verify(challengeAttemptRepository).save(challengeAttempt);
+        verify(challengeAttemptRepository).save(attempt);
     }
 
     @Test
@@ -82,11 +92,11 @@ class ChallengeServiceImplTest {
         //given
         Uzer existingUzer = new Uzer(1L, "Henkie");
         given(userRepository.findByAlias(existingUzer.getAlias())).willReturn(Optional.of(existingUzer));
-        ChallengeAttemptDTO challengeAttemptDTO = new ChallengeAttemptDTO(12, 12, "Henkie", 144);
+        AttemptDTO attemptDTO = new AttemptDTO(12, 12, "Henkie", 144);
 
 
         //when
-        ChallengeAttempt result = classUnderTest.verifyAttempt(challengeAttemptDTO);
+        Attempt result = classUnderTest.verifyAttempt(attemptDTO);
 
         //then
         then(result.isCorrect()).isTrue();
@@ -99,12 +109,12 @@ class ChallengeServiceImplTest {
     void getLatestTenAttempts() {
         //given
         Uzer uzer = new Uzer(1L, "Henkie");
-        ChallengeAttempt challengeAttempt1 = new ChallengeAttempt(1L, uzer, 12, 12, 144, false);
-        ChallengeAttempt challengeAttempt2 = new ChallengeAttempt(1L, uzer, 12, 12, 144, false);
-        List<ChallengeAttempt> listChallengeAttempts = List.of(challengeAttempt1, challengeAttempt2);
+        Attempt attempt1 = new Attempt(1L, uzer, 12, 12, 144, false);
+        Attempt attempt2 = new Attempt(1L, uzer, 12, 12, 144, false);
+        List<Attempt> listAttempts = List.of(attempt1, attempt2);
 
         //when
-        when(challengeAttemptRepository.findTop10ByUzerAliasOrderByIdDesc(anyString())).thenReturn(listChallengeAttempts);
+        when(challengeAttemptRepository.findTop10ByUzerAliasOrderByIdDesc(anyString())).thenReturn(listAttempts);
 
         //ArrayList<ChallengeAttempt> result = classUnderTest.getLastTenAttemptsForUser("Henkie");
 

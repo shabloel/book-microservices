@@ -1,6 +1,6 @@
 package com.games.gamification.gamification.services;
 
-import com.games.gamification.gamification.domain.dto.Attempt;
+import com.games.gamification.gamification.domain.model.ChallengeAttempt;
 import com.games.gamification.gamification.domain.model.BadgeCard;
 import com.games.gamification.gamification.domain.model.BadgeType;
 import com.games.gamification.gamification.domain.model.ScoreCard;
@@ -31,34 +31,35 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public Optional<GameResult> newAttemptFromUser(final Attempt challenge) {
-        if (challenge == null) {
+    public Optional<GameResult> newAttemptFromUser(final ChallengeAttempt attempt) {
+        if (attempt == null) {
             return Optional.empty();
         }
-        if (challenge.isCorrect()) {
+
+        if (attempt.isCorrect()) {
             ScoreCard scoreCard = new ScoreCard(
-                    challenge.getUserId(),
-                    challenge.getAttemptId()
+                    attempt.getUserId(),
+                    attempt.getId()
             );
             scoreCardRepo.save(scoreCard);
             log.info("Stored {} points for user {}, with attempt id {}",
                     scoreCard.getScore(),
-                    challenge.getUserAlias(),
-                    challenge.getAttemptId());
+                    attempt.getUserAlias(),
+                    attempt.getId());
 
-            List<BadgeCard> badgeCardList = processForBadges(challenge);
+            List<BadgeCard> badgeCardList = processForBadges(attempt);
 
             return Optional.of(new GameResult(scoreCard.getScore(), badgeCardList
                     .stream()
                     .map(BadgeCard::getBadgeType)
                     .collect(Collectors.toList())));
         } else {
-            log.info("Attempt id {} is not correct, user {} does not get any points.", challenge.getAttemptId(), challenge.getUserAlias());
+            log.info("Attempt id {} is not correct, user {} does not get any points.", attempt.getId(), attempt.getUserAlias());
             return Optional.of(new GameResult(0, List.of()));
         }
     }
 
-    private List<BadgeCard> processForBadges(Attempt attempt) {
+    private List<BadgeCard> processForBadges(ChallengeAttempt attempt) {
 
         Optional<Integer> optTotalScore = scoreCardRepo.getTotalScoreForUser(attempt.getUserId());
 

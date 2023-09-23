@@ -1,6 +1,6 @@
 package com.games.gamification.gamification.controllers;
 
-import com.games.gamification.gamification.domain.dto.Attempt;
+import com.games.gamification.gamification.domain.model.ChallengeAttempt;
 import com.games.gamification.gamification.services.GameService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,7 +19,7 @@ public class GameController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    void postResult(@RequestBody Attempt challenge) {
+    void postResult(@RequestBody ChallengeAttempt challenge) {
         gameService.newAttemptFromUser(challenge);
     }
 }

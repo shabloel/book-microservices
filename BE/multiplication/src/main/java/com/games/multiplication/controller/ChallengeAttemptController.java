@@ -1,7 +1,7 @@
 package com.games.multiplication.controller;
 
-import com.games.multiplication.domain.dto.ChallengeAttemptDTO;
-import com.games.multiplication.domain.model.ChallengeAttempt;
+import com.games.multiplication.domain.dto.AttemptDTO;
+import com.games.multiplication.domain.model.Attempt;
 import com.games.multiplication.services.ChallengeService;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
@@ -22,14 +22,14 @@ public class ChallengeAttemptController {
     }
 
     @PostMapping
-    ResponseEntity<ChallengeAttempt> postAChallengeAttempt(@RequestBody @Valid ChallengeAttemptDTO challengeAttemptDTO) {
-        log.info("Received a request from client with the following attempt: [{}]", challengeAttemptDTO);
-        ChallengeAttempt challengeAttempt = challengeService.verifyAttempt(challengeAttemptDTO);
-        return ResponseEntity.ok(challengeAttempt);
+    ResponseEntity<Attempt> postAChallengeAttempt(@RequestBody @Valid AttemptDTO attemptDTO) {
+        log.info("Received a request from client with the following attempt: [{}]", attemptDTO);
+        Attempt attempt = challengeService.verifyAttempt(attemptDTO);
+        return ResponseEntity.ok(attempt);
     }
 
     @GetMapping
-    ResponseEntity<List<ChallengeAttempt>> getUserStats(@RequestParam("alias") String alias) {
+    ResponseEntity<List<Attempt>> getUserStats(@RequestParam("alias") String alias) {
         log.info("Get request received fot the last 10 attempts for usr [{}]", alias);
 
         return ResponseEntity.ok(challengeService.getUserStats(alias));

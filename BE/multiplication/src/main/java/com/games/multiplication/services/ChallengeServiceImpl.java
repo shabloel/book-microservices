@@ -1,13 +1,13 @@
 package com.games.multiplication.services;
 
-import com.games.multiplication.domain.model.ChallengeAttempt;
-import com.games.multiplication.domain.dto.ChallengeAttemptDTO;
+import com.games.multiplication.domain.dto.AttemptCheckedDto;
+import com.games.multiplication.domain.model.Attempt;
+import com.games.multiplication.domain.dto.AttemptDTO;
 import com.games.multiplication.domain.model.Uzer;
 import com.games.multiplication.repos.ChallengeAttemptRepository;
 import com.games.multiplication.repos.UserRepository;
 import com.games.multiplication.serviceclient.GamificationServiceClient;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,27 +29,36 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
-    public ChallengeAttempt verifyAttempt(ChallengeAttemptDTO challengeAttemptDto) {
+    public Attempt verifyAttempt(AttemptDTO attemptDto) {
 
         boolean isCorrect =
-                challengeAttemptDto.getFactorA() * challengeAttemptDto.getFactorB() == challengeAttemptDto.getGuess() ? true : false;
+                attemptDto.getFactorA() * attemptDto.getFactorB() == attemptDto.getGuess() ? true : false;
 
-        Uzer user = userRepository.findByAlias(challengeAttemptDto.getUserAlias()).orElseGet(() -> {
-            log.info("Storing a new user with alias [{}]", challengeAttemptDto.getUserAlias());
-            return userRepository.save(new Uzer(challengeAttemptDto.getUserAlias()));
+        Uzer user = userRepository.findByAlias(attemptDto.getUserAlias()).orElseGet(() -> {
+            log.info("Storing a new user with alias [{}]", attemptDto.getUserAlias());
+            return userRepository.save(new Uzer(attemptDto.getUserAlias()));
         });
 
-        ChallengeAttempt challengeAttempt =
-                new ChallengeAttempt(null,
+        Attempt attempt =
+                new Attempt(null,
                         user,
-                        challengeAttemptDto.getFactorA(),
-                        challengeAttemptDto.getFactorB(),
-                        challengeAttemptDto.getGuess(),
+                        attemptDto.getFactorA(),
+                        attemptDto.getFactorB(),
+                        attemptDto.getGuess(),
                         isCorrect);
-        ChallengeAttempt storedAttempt = challengeAttemptRepository.save(challengeAttempt);
+        Attempt storedAttempt = challengeAttemptRepository.save(attempt);
 
         //Send the challengeAttempt to the Leaderboardservice
-        var isSuccessful = gamificationServiceClient.sendAttempt(challengeAttempt);
+        AttemptCheckedDto attemptCheckedDto = new AttemptCheckedDto(
+                storedAttempt.getId(),
+                storedAttempt.isCorrect(),
+                storedAttempt.getFactorA(),
+                storedAttempt.getFactorB(),
+                storedAttempt.getUzer().getId(),
+                storedAttempt.getUzer().getAlias()
+        );
+
+        var isSuccessful = gamificationServiceClient.sendAttempt(attemptCheckedDto);
         if(isSuccessful){
             log.info("Successfully sent the challenge attempt to the LeaderBoardService");
         } else {
@@ -59,7 +68,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
-    public List<ChallengeAttempt> getUserStats(String alias) {
+    public List<Attempt> getUserStats(String alias) {
 
         return challengeAttemptRepository.findTop10ByUzerAliasOrderByIdDesc(alias);
     }

@@ -1,11 +1,11 @@
-package com.games.multiplication.domain.dto;
+package com.games.gamification.gamification.domain.model;
 
 import lombok.Value;
 
 @Value
-public class Attempt {
+public class ChallengeAttempt {
 
-    private long attemptId;
+    private long id;
     private boolean correct;
     private int factorA;
     private int factorB;

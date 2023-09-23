@@ -1,8 +1,8 @@
 package com.games.multiplication.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.games.multiplication.domain.model.ChallengeAttempt;
-import com.games.multiplication.domain.dto.ChallengeAttemptDTO;
+import com.games.multiplication.domain.model.Attempt;
+import com.games.multiplication.domain.dto.AttemptDTO;
 import com.games.multiplication.domain.model.Uzer;
 import com.games.multiplication.services.ChallengeService;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,10 +38,10 @@ class ChallengeAttemptControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private JacksonTester<ChallengeAttemptDTO> jsonRequestAttempt;
+    private JacksonTester<AttemptDTO> jsonRequestAttempt;
 
     @Autowired
-    private JacksonTester<ChallengeAttempt> jsonChallengeAttempt;
+    private JacksonTester<Attempt> jsonChallengeAttempt;
 
 
     @BeforeEach
@@ -53,18 +53,18 @@ class ChallengeAttemptControllerTest {
         //given
         Uzer user = new Uzer(1L, "Henkie");
 
-        ChallengeAttemptDTO challengeAttemptDTO =
-                new ChallengeAttemptDTO(12, 12, "Henkie", 144);
+        AttemptDTO attemptDTO =
+                new AttemptDTO(12, 12, "Henkie", 144);
 
-        ChallengeAttempt challengeAttempt =
-                new ChallengeAttempt(1L, user, 12, 12, 144, true);
+        Attempt attempt =
+                new Attempt(1L, user, 12, 12, 144, true);
 
         ObjectMapper objectMapper = new ObjectMapper();
-        String requestBody = objectMapper.writeValueAsString(challengeAttemptDTO);
+        String requestBody = objectMapper.writeValueAsString(attemptDTO);
 
 
         //when
-        when(challengeService.verifyAttempt(any())).thenReturn(challengeAttempt);
+        when(challengeService.verifyAttempt(any())).thenReturn(attempt);
 
         MockHttpServletResponse response = mockMvc.perform(
                 post("/attempts")
@@ -75,7 +75,7 @@ class ChallengeAttemptControllerTest {
 
         //then
         then(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-        then(response.getContentAsString()).isEqualTo(jsonChallengeAttempt.write(challengeAttempt).getJson());
+        then(response.getContentAsString()).isEqualTo(jsonChallengeAttempt.write(attempt).getJson());
     }
 
     @Test
@@ -83,14 +83,14 @@ class ChallengeAttemptControllerTest {
         //given
         Uzer user = new Uzer(1L, "Henkie");
 
-        ChallengeAttemptDTO challengeAttemptDTO =
-                new ChallengeAttemptDTO(1200, -12, "Henkie", -150);
+        AttemptDTO attemptDTO =
+                new AttemptDTO(1200, -12, "Henkie", -150);
 
         //when
         MockHttpServletResponse response = mockMvc.perform(post("/attempts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequestAttempt
-                                .write(challengeAttemptDTO)
+                                .write(attemptDTO)
                                 .getJson()))
                 .andReturn()
                 .getResponse();
