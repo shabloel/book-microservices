@@ -4,6 +4,7 @@ import com.games.multiplication.domain.dto.AttemptCheckedDto;
 import com.games.multiplication.domain.dto.AttemptDTO;
 import com.games.multiplication.domain.model.Attempt;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -14,12 +15,15 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class GamificationServiceClient {
     private RestTemplate restTemplate;
-    private String gamificationHostUrl ="http://localhost:8081";
+    private String gamificationHostUrl;
 
     public GamificationServiceClient(
-            final RestTemplateBuilder builder) {
+            final RestTemplateBuilder builder,
+            @Value("${service.gamification.host}")
+            final String gamificationHostUrl) {
 
         this.restTemplate = builder.build();
+        this.gamificationHostUrl = gamificationHostUrl;
     }
 
     public boolean sendAttempt(final AttemptCheckedDto attempt){
