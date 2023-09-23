@@ -34,7 +34,7 @@ class LeaderBoardServiceTest {
     }
 
     @Test
-    void getCurrentLeaderBoard() {
+    void should_get_current_leaderboard() {
         //given
         LeaderBoardRow leaderBoardRow = new LeaderBoardRow(1L, 150L);
         given(scoreCardRepo.findFirstTen()).willReturn(List.of(leaderBoardRow));
