@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ChallengeAttemptRepository extends CrudRepository<Attempt, Long> {
+public interface AttemptRepository extends CrudRepository<Attempt, Long> {
 
     /**
      * @return the last 10 attempts for a given user, identiefied by their alias.

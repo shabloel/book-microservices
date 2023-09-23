@@ -4,7 +4,7 @@ import com.games.multiplication.domain.dto.AttemptCheckedDto;
 import com.games.multiplication.domain.model.Attempt;
 import com.games.multiplication.domain.dto.AttemptDTO;
 import com.games.multiplication.domain.model.Uzer;
-import com.games.multiplication.repos.ChallengeAttemptRepository;
+import com.games.multiplication.repos.AttemptRepository;
 import com.games.multiplication.repos.UserRepository;
 import com.games.multiplication.serviceclient.GamificationServiceClient;
 import lombok.extern.slf4j.Slf4j;
@@ -20,12 +20,12 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     private final GamificationServiceClient gamificationServiceClient;
 
-    private final ChallengeAttemptRepository challengeAttemptRepository;
+    private final AttemptRepository attemptRepository;
 
-    public ChallengeServiceImpl(UserRepository userRepository, GamificationServiceClient gamificationServiceClient, ChallengeAttemptRepository challengeAttemptRepository) {
+    public ChallengeServiceImpl(UserRepository userRepository, GamificationServiceClient gamificationServiceClient, AttemptRepository attemptRepository) {
         this.userRepository = userRepository;
         this.gamificationServiceClient = gamificationServiceClient;
-        this.challengeAttemptRepository = challengeAttemptRepository;
+        this.attemptRepository = attemptRepository;
     }
 
     @Override
@@ -46,7 +46,7 @@ public class ChallengeServiceImpl implements ChallengeService {
                         attemptDto.getFactorB(),
                         attemptDto.getGuess(),
                         isCorrect);
-        Attempt storedAttempt = challengeAttemptRepository.save(attempt);
+        Attempt storedAttempt = attemptRepository.save(attempt);
 
         //Send the challengeAttempt to the Leaderboardservice
         AttemptCheckedDto attemptCheckedDto = new AttemptCheckedDto(
@@ -70,7 +70,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     @Override
     public List<Attempt> getUserStats(String alias) {
 
-        return challengeAttemptRepository.findTop10ByUzerAliasOrderByIdDesc(alias);
+        return attemptRepository.findTop10ByUzerAliasOrderByIdDesc(alias);
     }
 
 

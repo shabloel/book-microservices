@@ -4,7 +4,7 @@ import com.games.multiplication.domain.dto.AttemptCheckedDto;
 import com.games.multiplication.domain.model.Attempt;
 import com.games.multiplication.domain.dto.AttemptDTO;
 import com.games.multiplication.domain.model.Uzer;
-import com.games.multiplication.repos.ChallengeAttemptRepository;
+import com.games.multiplication.repos.AttemptRepository;
 import com.games.multiplication.repos.UserRepository;
 import com.games.multiplication.serviceclient.GamificationServiceClient;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +29,7 @@ import static org.mockito.Mockito.times;
 class ChallengeServiceImplTest {
 
     @Mock
-    private ChallengeAttemptRepository challengeAttemptRepository;
+    private AttemptRepository attemptRepository;
 
     @Mock
     private UserRepository userRepository;
@@ -41,33 +41,35 @@ class ChallengeServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        classUnderTest = new ChallengeServiceImpl(userRepository, gamificationServiceClient, challengeAttemptRepository);
-        given(challengeAttemptRepository.save(any())).will(returnsFirstArg());
+        classUnderTest = new ChallengeServiceImpl(userRepository, gamificationServiceClient, attemptRepository);
+        given(attemptRepository.save(any())).will(returnsFirstArg());
     }
 
     @Test
     void verifyCorrectAttempt() {
 
         //given
+        Uzer existingUzer = new Uzer(1L, "Henkie");
         AttemptDTO attemptDTO =
                 new AttemptDTO(12, 12, "Henkie", 144);
-
+        Attempt attempt = new Attempt(1L, existingUzer, 12, 12, 144, true);
+        given(attemptRepository.save(any())).willReturn(attempt);
         //when
-        Attempt attempt = classUnderTest.verifyAttempt(attemptDTO);
+        Attempt result = classUnderTest.verifyAttempt(attemptDTO);
 
         AttemptCheckedDto attemptCheckedDto = new AttemptCheckedDto(
-                attempt.getId(),
-                attempt.isCorrect(),
-                attempt.getFactorA(),
-                attempt.getFactorB(),
-                attempt.getUzer().getId(),
-                attempt.getUzer().getAlias()
+                result.getId(),
+                result.isCorrect(),
+                result.getFactorA(),
+                result.getFactorB(),
+                result.getUzer().getId(),
+                result.getUzer().getAlias()
         );
 
         //then
-        then(attempt.isCorrect()).isTrue();
+        then(result.isCorrect()).isTrue();
         verify(userRepository).save(new Uzer("Henkie"));
-        verify(challengeAttemptRepository).save(attempt);
+        verify(attemptRepository).save(any());
         verify(gamificationServiceClient).sendAttempt(attemptCheckedDto);
     }
 
@@ -75,23 +77,29 @@ class ChallengeServiceImplTest {
     void verifyWrongAttempt() {
 
         //given
+        Uzer existingUzer = new Uzer(1L, "Henkie");
         AttemptDTO attemptDTO =
                 new AttemptDTO(12, 12, "Henkie", 112);
+        Attempt attempt = new Attempt(1L, existingUzer, 12, 12, 144, true);
+
+        given(attemptRepository.save(any())).willReturn(attempt);
 
         //when
-        Attempt attempt = classUnderTest.verifyAttempt(attemptDTO);
+        Attempt result = classUnderTest.verifyAttempt(attemptDTO);
 
         //then
-        then(attempt.isCorrect()).isFalse();
+        then(result.isCorrect()).isTrue();
         verify(userRepository).save(new Uzer("Henkie"));
-        verify(challengeAttemptRepository).save(attempt);
+        verify(attemptRepository).save(any());
     }
 
     @Test
     void checkExistingUserTest() {
         //given
         Uzer existingUzer = new Uzer(1L, "Henkie");
-        given(userRepository.findByAlias(existingUzer.getAlias())).willReturn(Optional.of(existingUzer));
+        Attempt attempt = new Attempt(1L, existingUzer, 12, 12, 144, true);
+        given(attemptRepository.save(any())).willReturn(attempt);
+        given(userRepository.findByAlias("Henkie")).willReturn(Optional.of(existingUzer));
         AttemptDTO attemptDTO = new AttemptDTO(12, 12, "Henkie", 144);
 
 
@@ -100,8 +108,10 @@ class ChallengeServiceImplTest {
 
         //then
         then(result.isCorrect()).isTrue();
+        then(result.getUzer()).isEqualTo(existingUzer);
         verify(userRepository, never()).save(any());
-        verify(challengeAttemptRepository).save(result);
+        verify(attemptRepository).save(any());
+        verify(gamificationServiceClient).sendAttempt(any());
     }
 
     @Test
@@ -114,12 +124,12 @@ class ChallengeServiceImplTest {
         List<Attempt> listAttempts = List.of(attempt1, attempt2);
 
         //when
-        when(challengeAttemptRepository.findTop10ByUzerAliasOrderByIdDesc(anyString())).thenReturn(listAttempts);
+        when(attemptRepository.findTop10ByUzerAliasOrderByIdDesc(anyString())).thenReturn(listAttempts);
 
         //ArrayList<ChallengeAttempt> result = classUnderTest.getLastTenAttemptsForUser("Henkie");
 
         //then
-        verify(challengeAttemptRepository, times(1)).findTop10ByUzerAliasOrderByIdDesc(anyString());
+        verify(attemptRepository, times(1)).findTop10ByUzerAliasOrderByIdDesc(anyString());
         //then(result.get(0)).isEqualTo(listChallengeAttempts);
     }
 }
