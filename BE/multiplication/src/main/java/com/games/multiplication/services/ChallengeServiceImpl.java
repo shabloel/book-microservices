@@ -46,16 +46,29 @@ public class ChallengeServiceImpl implements ChallengeService {
                         attemptDto.getFactorB(),
                         attemptDto.getGuess(),
                         isCorrect);
+
         Attempt storedAttempt = attemptRepository.save(attempt);
 
         //Send the challengeAttempt to the Leaderboardservice
+        sentCheckedAttempt(storedAttempt);
+
+        return storedAttempt;
+    }
+
+    @Override
+    public List<Attempt> getUserStats(String alias) {
+
+        return attemptRepository.findTop10ByUzerAliasOrderByIdDesc(alias);
+    }
+
+    private void sentCheckedAttempt(Attempt attemnpt) {
         AttemptCheckedDto attemptCheckedDto = new AttemptCheckedDto(
-                storedAttempt.getId(),
-                storedAttempt.isCorrect(),
-                storedAttempt.getFactorA(),
-                storedAttempt.getFactorB(),
-                storedAttempt.getUzer().getId(),
-                storedAttempt.getUzer().getAlias()
+                attemnpt.getId(),
+                attemnpt.isCorrect(),
+                attemnpt.getFactorA(),
+                attemnpt.getFactorB(),
+                attemnpt.getUzer().getId(),
+                attemnpt.getUzer().getAlias()
         );
 
         var isSuccessful = gamificationServiceClient.sendAttempt(attemptCheckedDto);
@@ -64,13 +77,7 @@ public class ChallengeServiceImpl implements ChallengeService {
         } else {
             log.info("There was an error sending the challenge attempt to the LeaderBoardService");
         }
-        return storedAttempt;
-    }
 
-    @Override
-    public List<Attempt> getUserStats(String alias) {
-
-        return attemptRepository.findTop10ByUzerAliasOrderByIdDesc(alias);
     }
 
 
