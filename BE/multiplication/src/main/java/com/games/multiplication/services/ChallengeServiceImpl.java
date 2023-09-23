@@ -5,7 +5,9 @@ import com.games.multiplication.domain.dto.ChallengeAttemptDTO;
 import com.games.multiplication.domain.model.Uzer;
 import com.games.multiplication.repos.ChallengeAttemptRepository;
 import com.games.multiplication.repos.UserRepository;
+import com.games.multiplication.serviceclient.GamificationServiceClient;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,12 +16,15 @@ import java.util.List;
 @Slf4j
 public class ChallengeServiceImpl implements ChallengeService {
 
-    UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    ChallengeAttemptRepository challengeAttemptRepository;
+    private final GamificationServiceClient gamificationServiceClient;
 
-    public ChallengeServiceImpl(UserRepository userRepository, ChallengeAttemptRepository challengeAttemptRepository) {
+    private final ChallengeAttemptRepository challengeAttemptRepository;
+
+    public ChallengeServiceImpl(UserRepository userRepository, GamificationServiceClient gamificationServiceClient, ChallengeAttemptRepository challengeAttemptRepository) {
         this.userRepository = userRepository;
+        this.gamificationServiceClient = gamificationServiceClient;
         this.challengeAttemptRepository = challengeAttemptRepository;
     }
 
@@ -42,6 +47,14 @@ public class ChallengeServiceImpl implements ChallengeService {
                         challengeAttemptDto.getGuess(),
                         isCorrect);
         ChallengeAttempt storedAttempt = challengeAttemptRepository.save(challengeAttempt);
+
+        //Send the challengeAttempt to the Leaderboardservice
+        var isSuccessful = gamificationServiceClient.sendAttempt(challengeAttempt);
+        if(isSuccessful){
+            log.info("Successfully sent the challenge attempt to the LeaderBoardService");
+        } else {
+            log.info("There was an error sending the challenge attempt to the LeaderBoardService");
+        }
         return storedAttempt;
     }
 

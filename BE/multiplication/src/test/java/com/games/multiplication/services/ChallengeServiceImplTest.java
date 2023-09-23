@@ -5,6 +5,7 @@ import com.games.multiplication.domain.dto.ChallengeAttemptDTO;
 import com.games.multiplication.domain.model.Uzer;
 import com.games.multiplication.repos.ChallengeAttemptRepository;
 import com.games.multiplication.repos.UserRepository;
+import com.games.multiplication.serviceclient.GamificationServiceClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -32,11 +33,14 @@ class ChallengeServiceImplTest {
     @Mock
     private UserRepository userRepository;
 
+    @Mock
+    private GamificationServiceClient gamificationServiceClient;
+
     private ChallengeService classUnderTest;
 
     @BeforeEach
     void setUp() {
-        classUnderTest = new ChallengeServiceImpl(userRepository, challengeAttemptRepository);
+        classUnderTest = new ChallengeServiceImpl(userRepository, gamificationServiceClient, challengeAttemptRepository);
         given(challengeAttemptRepository.save(any())).will(returnsFirstArg());
     }
 
@@ -54,6 +58,7 @@ class ChallengeServiceImplTest {
         then(challengeAttempt.isCorrect()).isTrue();
         verify(userRepository).save(new Uzer("Henkie"));
         verify(challengeAttemptRepository).save(challengeAttempt);
+        verify(gamificationServiceClient).sendAttempt(challengeAttempt);
     }
 
     @Test
