@@ -1,4 +1,4 @@
-package com.games.gamification.gamification.domain.model;
+package com.games.gamification.gamification.domain.dto;
 
 
 import lombok.AllArgsConstructor;

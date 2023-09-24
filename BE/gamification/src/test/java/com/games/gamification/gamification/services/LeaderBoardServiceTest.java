@@ -2,7 +2,7 @@ package com.games.gamification.gamification.services;
 
 import com.games.gamification.gamification.domain.model.BadgeCard;
 import com.games.gamification.gamification.domain.model.BadgeType;
-import com.games.gamification.gamification.domain.model.LeaderBoardRow;
+import com.games.gamification.gamification.domain.dto.LeaderBoardRow;
 import com.games.gamification.gamification.repositories.BadgeRepo;
 import com.games.gamification.gamification.repositories.ScoreCardRepo;
 import org.junit.jupiter.api.BeforeEach;

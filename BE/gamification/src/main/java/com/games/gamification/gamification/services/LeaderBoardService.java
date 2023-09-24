@@ -1,6 +1,6 @@
 package com.games.gamification.gamification.services;
 
-import com.games.gamification.gamification.domain.model.LeaderBoardRow;
+import com.games.gamification.gamification.domain.dto.LeaderBoardRow;
 
 import java.util.List;
 

@@ -1,8 +1,7 @@
 package com.games.gamification.gamification.controllers;
 
-import com.games.gamification.gamification.domain.model.LeaderBoardRow;
+import com.games.gamification.gamification.domain.dto.LeaderBoardRow;
 import com.games.gamification.gamification.services.LeaderBoardService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
