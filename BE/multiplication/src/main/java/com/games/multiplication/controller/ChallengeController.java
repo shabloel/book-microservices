@@ -19,8 +19,7 @@ public class ChallengeController {
 
     @GetMapping("/random")
     public Challenge getChallenge(){
-        Challenge challenge = challengeGeneratorService.randomChallenge();
-        //log.info("Received GET request /challenges, and returning challenge [{}]", challenge.toString());
-        return challenge;
+        log.info("Received GET request to /challenges, and returning a random challenge");
+        return challengeGeneratorService.randomChallenge();
     }
 }

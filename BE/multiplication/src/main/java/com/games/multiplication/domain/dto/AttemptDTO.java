@@ -9,8 +9,10 @@ import lombok.Value;
 @Value
 public class AttemptDTO {
 
-    @Min(1) @Max(99)
-    int factorA, factorB;
+    @Min(1)
+    int factorA;
+    @Max(99)
+    int factorB;
     @NotBlank
     String userAlias;
     @Positive

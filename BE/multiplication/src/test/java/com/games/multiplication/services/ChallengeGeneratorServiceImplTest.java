@@ -25,7 +25,7 @@ class ChallengeGeneratorServiceImplTest {
     }
 
     @Test
-    public void generateRandomChallengeBetweenExpectedLimits(){
+    void generateRandomChallengeBetweenExpectedLimits(){
         given(random.nextInt(88)).willReturn(20, 30);
 
         Challenge challenge = challengeGeneratorService.randomChallenge();
