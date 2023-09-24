@@ -1,8 +1,8 @@
 package com.games.multiplication.services;
 
 import com.games.multiplication.domain.dto.AttemptCheckedDto;
-import com.games.multiplication.domain.model.Attempt;
 import com.games.multiplication.domain.dto.AttemptDTO;
+import com.games.multiplication.domain.model.Attempt;
 import com.games.multiplication.domain.model.Uzer;
 import com.games.multiplication.repos.AttemptRepository;
 import com.games.multiplication.repos.UserRepository;
@@ -23,7 +23,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 class ChallengeServiceImplTest {
@@ -42,7 +41,6 @@ class ChallengeServiceImplTest {
     @BeforeEach
     void setUp() {
         classUnderTest = new ChallengeServiceImpl(userRepository, gamificationServiceClient, attemptRepository);
-        given(attemptRepository.save(any())).will(returnsFirstArg());
     }
 
     @Test
@@ -115,21 +113,18 @@ class ChallengeServiceImplTest {
     }
 
     @Test
-    @Disabled
     void getLatestTenAttempts() {
         //given
         Uzer uzer = new Uzer(1L, "Henkie");
         Attempt attempt1 = new Attempt(1L, uzer, 12, 12, 144, false);
         Attempt attempt2 = new Attempt(1L, uzer, 12, 12, 144, false);
         List<Attempt> listAttempts = List.of(attempt1, attempt2);
+        given(attemptRepository.findTop10ByUzerAliasOrderByIdDesc("Henkie")).willReturn(listAttempts);
 
         //when
-        when(attemptRepository.findTop10ByUzerAliasOrderByIdDesc(anyString())).thenReturn(listAttempts);
-
-        //ArrayList<ChallengeAttempt> result = classUnderTest.getLastTenAttemptsForUser("Henkie");
+        List<Attempt> result = classUnderTest.getUserStats("Henkie");
 
         //then
-        verify(attemptRepository, times(1)).findTop10ByUzerAliasOrderByIdDesc(anyString());
-        //then(result.get(0)).isEqualTo(listChallengeAttempts);
+        then(result).isEqualTo(listAttempts);
     }
 }
