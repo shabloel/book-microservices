@@ -30,8 +30,8 @@ public class LeaderBoardServiceImpl implements LeaderBoardService {
                     badgeRepo.findByUserIdOrderByBadgeTimestampDesc(row.getUserId())
                             .stream()
                             .map(badge -> badge.getBadgeType().getDescription())
-                            .collect(Collectors.toList());
+                            .toList();
             return row.withBadges(badges);
-        }).collect(Collectors.toList());
+        }).toList();
     }
 }

@@ -24,7 +24,7 @@ public interface ScoreCardRepo extends CrudRepository<ScoreCard, Long> {
             ".gamification." +
             "gamification" +
             ".domain" +
-            ".model" +
+            ".dto" +
             ".LeaderBoardRow(s.userId, SUM(s.score)) FROM ScoreCard s GROUP BY s.userId " +
             "ORDER BY SUM(s.score) DESC")
     List<LeaderBoardRow> findFirstTen();

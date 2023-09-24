@@ -19,12 +19,12 @@ class FirstTimeBadgeProcessorTest {
     }
 
     @Test
-    public void should_give_first_time_when_one_scorecard() {
+    void should_give_first_time_when_one_scorecard() {
         Optional<BadgeType> result = underTest.processForOptionalBadge(10, List.of(new ScoreCard(1L, 1L)), null);
         assertThat(result).contains(BadgeType.FIRST_WON);
     }
     @Test
-    public void should_NOT_give_first_time_when_one_scorecard() {
+    void should_NOT_give_first_time_when_one_scorecard() {
         Optional<BadgeType> result = underTest.processForOptionalBadge(10, List.of(new ScoreCard(1L, 1L), new ScoreCard(1L, 2L)), null);
         assertThat(result).isEmpty();
     }

@@ -52,7 +52,7 @@ public class GameServiceImpl implements GameService {
             return Optional.of(new GameResult(scoreCard.getScore(), badgeCardList
                     .stream()
                     .map(BadgeCard::getBadgeType)
-                    .collect(Collectors.toList())));
+                    .toList()));
         } else {
             log.info("Attempt id {} is not correct, user {} does not get any points.", attempt.getId(), attempt.getUserAlias());
             return Optional.of(new GameResult(0, List.of()));
@@ -80,7 +80,7 @@ public class GameServiceImpl implements GameService {
                 .map(bp -> bp.processForOptionalBadge(totalScore, scoreCardList, attempt))
                 .flatMap(Optional::stream)
                 .map(bt -> new BadgeCard(attempt.getUserId(), bt))
-                .collect(Collectors.toList());
+                .toList();
 
         badgeRepo.saveAll(newBadgeCards);
         return newBadgeCards;
