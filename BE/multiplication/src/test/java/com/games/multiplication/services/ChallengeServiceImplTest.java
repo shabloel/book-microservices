@@ -7,8 +7,8 @@ import com.games.multiplication.domain.model.Uzer;
 import com.games.multiplication.repos.AttemptRepository;
 import com.games.multiplication.repos.UserRepository;
 import com.games.multiplication.serviceclient.GamificationServiceClient;
+import com.games.multiplication.services.mapper.SourceDestinationMapper;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -18,9 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.BDDAssertions.then;
-import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
@@ -36,11 +34,14 @@ class ChallengeServiceImplTest {
     @Mock
     private GamificationServiceClient gamificationServiceClient;
 
+    @Mock
+    private SourceDestinationMapper sourceDestinationMapper;
+
     private ChallengeService classUnderTest;
 
     @BeforeEach
     void setUp() {
-        classUnderTest = new ChallengeServiceImpl(userRepository, gamificationServiceClient, attemptRepository);
+        classUnderTest = new ChallengeServiceImpl(userRepository, gamificationServiceClient, attemptRepository, sourceDestinationMapper);
     }
 
     @Test
@@ -52,17 +53,11 @@ class ChallengeServiceImplTest {
                 new AttemptDTO(12, 12, "Henkie", 144);
         Attempt attempt = new Attempt(1L, existingUzer, 12, 12, 144, true);
         given(attemptRepository.save(any())).willReturn(attempt);
+        given(sourceDestinationMapper.attemptDtoToAttemptEntity(any())).willReturn(attempt);
         //when
         Attempt result = classUnderTest.verifyAttempt(attemptDTO);
 
-        AttemptCheckedDto attemptCheckedDto = new AttemptCheckedDto(
-                result.getId(),
-                result.isCorrect(),
-                result.getFactorA(),
-                result.getFactorB(),
-                result.getUzer().getId(),
-                result.getUzer().getAlias()
-        );
+        AttemptCheckedDto attemptCheckedDto = sourceDestinationMapper.attemptToAttemptCheckedDto(attempt);
 
         //then
         then(result.isCorrect()).isTrue();
@@ -80,13 +75,14 @@ class ChallengeServiceImplTest {
                 new AttemptDTO(12, 12, "Henkie", 112);
         Attempt attempt = new Attempt(1L, existingUzer, 12, 12, 144, true);
 
+        given(sourceDestinationMapper.attemptDtoToAttemptEntity(any())).willReturn(attempt);
         given(attemptRepository.save(any())).willReturn(attempt);
 
         //when
         Attempt result = classUnderTest.verifyAttempt(attemptDTO);
 
         //then
-        then(result.isCorrect()).isTrue();
+        then(result.isCorrect()).isFalse();
         verify(userRepository).save(new Uzer("Henkie"));
         verify(attemptRepository).save(any());
     }
@@ -97,6 +93,7 @@ class ChallengeServiceImplTest {
         Uzer existingUzer = new Uzer(1L, "Henkie");
         Attempt attempt = new Attempt(1L, existingUzer, 12, 12, 144, true);
         given(attemptRepository.save(any())).willReturn(attempt);
+        given(sourceDestinationMapper.attemptDtoToAttemptEntity(any())).willReturn(attempt);
         given(userRepository.findByAlias("Henkie")).willReturn(Optional.of(existingUzer));
         AttemptDTO attemptDTO = new AttemptDTO(12, 12, "Henkie", 144);
 

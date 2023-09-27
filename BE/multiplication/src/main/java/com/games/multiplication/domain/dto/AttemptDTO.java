@@ -16,5 +16,5 @@ public class AttemptDTO {
     @NotBlank
     String userAlias;
     @Positive
-    int guess;
+    int userGuess;
 }

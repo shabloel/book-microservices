@@ -4,10 +4,10 @@ import lombok.Value;
 
 @Value
 public class AttemptCheckedDto {
-    private long id;
-    private boolean correct;
+    private Long id;
     private int factorA;
     private int factorB;
-    private long userId;
+    private Long userId;
     private String userAlias;
+    private boolean correct;
 }

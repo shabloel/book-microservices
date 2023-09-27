@@ -7,6 +7,7 @@ import com.games.multiplication.domain.model.Uzer;
 import com.games.multiplication.repos.AttemptRepository;
 import com.games.multiplication.repos.UserRepository;
 import com.games.multiplication.serviceclient.GamificationServiceClient;
+import com.games.multiplication.services.mapper.SourceDestinationMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -22,30 +23,29 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     private final AttemptRepository attemptRepository;
 
-    public ChallengeServiceImpl(UserRepository userRepository, GamificationServiceClient gamificationServiceClient, AttemptRepository attemptRepository) {
+    private final SourceDestinationMapper sourceDestinationMapper;
+
+    public ChallengeServiceImpl(UserRepository userRepository, GamificationServiceClient gamificationServiceClient, AttemptRepository attemptRepository, SourceDestinationMapper sourceDestinationMapper) {
         this.userRepository = userRepository;
         this.gamificationServiceClient = gamificationServiceClient;
         this.attemptRepository = attemptRepository;
+        this.sourceDestinationMapper = sourceDestinationMapper;
     }
 
     @Override
     public Attempt verifyAttempt(AttemptDTO attemptDto) {
 
         boolean isCorrect =
-                attemptDto.getFactorA() * attemptDto.getFactorB() == attemptDto.getGuess() ? true : false;
+                attemptDto.getFactorA() * attemptDto.getFactorB() == attemptDto.getUserGuess() ? true : false;
 
         Uzer user = userRepository.findByAlias(attemptDto.getUserAlias()).orElseGet(() -> {
             log.info("Storing a new user with alias [{}]", attemptDto.getUserAlias());
             return userRepository.save(new Uzer(attemptDto.getUserAlias()));
         });
 
-        Attempt attempt =
-                new Attempt(null,
-                        user,
-                        attemptDto.getFactorA(),
-                        attemptDto.getFactorB(),
-                        attemptDto.getGuess(),
-                        isCorrect);
+        Attempt attempt = sourceDestinationMapper.attemptDtoToAttemptEntity(attemptDto);
+        attempt.setUzer(user);
+        attempt.setCorrect(isCorrect);
 
         Attempt storedAttempt = attemptRepository.save(attempt);
 
@@ -61,15 +61,8 @@ public class ChallengeServiceImpl implements ChallengeService {
         return attemptRepository.findTop10ByUzerAliasOrderByIdDesc(alias);
     }
 
-    private void sentCheckedAttempt(Attempt attemnpt) {
-        AttemptCheckedDto attemptCheckedDto = new AttemptCheckedDto(
-                attemnpt.getId(),
-                attemnpt.isCorrect(),
-                attemnpt.getFactorA(),
-                attemnpt.getFactorB(),
-                attemnpt.getUzer().getId(),
-                attemnpt.getUzer().getAlias()
-        );
+    private void sentCheckedAttempt(Attempt attempt) {
+        AttemptCheckedDto attemptCheckedDto = sourceDestinationMapper.attemptToAttemptCheckedDto(attempt);
 
         var isSuccessful = gamificationServiceClient.sendAttempt(attemptCheckedDto);
         if(isSuccessful){
