@@ -18,13 +18,14 @@
             Your alias is required
           </mat-error>
         </mat-form-field>
-        <h4 class="challenge" *ngIf="haveChallenge">New challenge</h4>
-        <p *ngIf="haveChallenge; else elseBlock" class="challenge">
-          {{ challenge.factorA }} x {{ challenge.factorB }}
-        </p>
-
+        <div class="challenge">
+          <h6 *ngIf="haveChallenge">New challenge</h6>
+          <p *ngIf="haveChallenge; else elseBlock">
+            {{ challenge.factorA }} x {{ challenge.factorB }}
+          </p>
+        </div>
         <ng-template #elseBlock>
-          <p>No challenges to show</p>
+          <h4>No challenges yet</h4>
         </ng-template>
 
         <mat-form-field class="input guess">

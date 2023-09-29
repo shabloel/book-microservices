@@ -1,26 +1,33 @@
 .root {
   display: grid;
   min-height: 100vh;
-  grid-template-columns: 450px 400px 400px;
+  grid-template-columns: 25rem 35rem 25rem;
   justify-content: center;
   align-items: center;
   height: 100%;
-  gap: 5rem;
+  gap: 2rem;
 }
 
-.table {
-  align-self: start;
-  margin-top: 18rem;
+.attempts-table {
+  min-height: 45rem;
+  background-color: antiquewhite;
+  min-width: 25rem;
 }
 
-.container {
+.game {
   background-color: #282c34;
   min-height: 45rem;
-  min-width: 30rem;
+  min-width: 32rem;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: calc(10px + 2vmin);
   color: white;
   gap: 5rem;
+}
+
+.leaderboard-table {
+  min-height: 45rem;
+  min-width: 25rem;
+  background-color: antiquewhite;
 }

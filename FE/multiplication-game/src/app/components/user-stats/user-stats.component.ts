@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ChallengeAttempt } from 'src/app/dtos/challenge-attempt';
-import { ChallengeServiceService } from 'src/app/services/challenge-service.service';
+import { ChallengeServiceService } from 'src/app/core/http/challenge-service.service';
 import { ObservablesService } from 'src/app/services/observables.service';
 
 @Component({

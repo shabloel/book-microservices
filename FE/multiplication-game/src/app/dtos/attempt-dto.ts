@@ -1,4 +1,4 @@
-export class ChallengeAttemptDto {
+export class AttemptDto {
   factorA?: number;
   factorB?: number;
   userAlias?: string;

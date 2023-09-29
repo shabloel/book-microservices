@@ -15,9 +15,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { UserStatsComponent } from './components/user-stats/user-stats.component';
+import { LeaderBoardComponent } from './components/leader-board/leader-board.component';
 
 @NgModule({
-  declarations: [AppComponent, ChallengeComponentComponent, UserStatsComponent],
+  declarations: [AppComponent, ChallengeComponentComponent, UserStatsComponent, LeaderBoardComponent],
   imports: [
     BrowserModule,
     FormsModule,

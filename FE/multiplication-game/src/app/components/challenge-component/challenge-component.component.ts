@@ -6,8 +6,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Observable, Subject, concatMap, tap } from 'rxjs';
 import { Challenge } from 'src/app/dtos/challenge';
 import { ChallengeAttempt } from 'src/app/dtos/challenge-attempt';
-import { ChallengeAttemptDto } from 'src/app/dtos/challenge-attempt-dto';
-import { ChallengeServiceService } from 'src/app/services/challenge-service.service';
+import { AttemptDto } from 'src/app/dtos/attempt-dto';
+import { ChallengeServiceService } from 'src/app/core/http/challenge-service.service';
 import { ObservablesService } from 'src/app/services/observables.service';
 
 @Component({
@@ -44,7 +44,7 @@ export class ChallengeComponentComponent implements OnInit {
     this.loading = false;
   }
 
-  private sentChallenge(challengeAttempt: ChallengeAttemptDto) {
+  private sentChallenge(challengeAttempt: AttemptDto) {
     this.challengeService
       .sendChallenge(challengeAttempt)
       .pipe(
@@ -79,9 +79,9 @@ export class ChallengeComponentComponent implements OnInit {
     );
   }
 
-  private createChallengeAttempt(): ChallengeAttemptDto {
+  private createChallengeAttempt(): AttemptDto {
     const formValue = this.form.value;
-    const challengeAttempt = new ChallengeAttemptDto();
+    const challengeAttempt = new AttemptDto();
     challengeAttempt.factorA = this.challenge.factorA;
     challengeAttempt.factorB = this.challenge.factorB;
     challengeAttempt.guess = formValue.guess;

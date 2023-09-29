@@ -8,7 +8,7 @@
   display: flex;
   flex-direction: column;
   margin: 2rem 2rem;
-  max-width: 13.5rem;
+  max-width: 14.5rem;
 }
 
 .form {
@@ -38,8 +38,17 @@
 }
 
 .challenge {
-  display: flex;
-  justify-content: center;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.challenge {
+  background-color: indianred;
+}
+
+h4 {
+  margin-left: 2rem;
+  margin-top: 1rem;
 }
 
 .message {
