@@ -1,7 +1,7 @@
 package com.games.multiplication.services;
 
-import com.games.multiplication.domain.dto.AttemptCheckedDto;
-import com.games.multiplication.domain.model.Attempt;
+import com.games.multiplication.domain.dto.AttemptDtoChecked;
+import com.games.multiplication.domain.model.AttemptChecked;
 import com.games.multiplication.domain.dto.AttemptDTO;
 import com.games.multiplication.domain.model.Uzer;
 import com.games.multiplication.repos.AttemptRepository;
@@ -33,7 +33,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
-    public Attempt verifyAttempt(AttemptDTO attemptDto) {
+    public AttemptChecked verifyAttempt(AttemptDTO attemptDto) {
 
         boolean isCorrect =
                 attemptDto.getFactorA() * attemptDto.getFactorB() == attemptDto.getUserGuess() ? true : false;
@@ -43,35 +43,31 @@ public class ChallengeServiceImpl implements ChallengeService {
             return userRepository.save(new Uzer(attemptDto.getUserAlias()));
         });
 
-        Attempt attempt = sourceDestinationMapper.attemptDtoToAttemptEntity(attemptDto);
-        attempt.setUzer(user);
-        attempt.setCorrect(isCorrect);
-
-        Attempt storedAttempt = attemptRepository.save(attempt);
+        AttemptChecked attemptChecked = sourceDestinationMapper.attemptDtoToAttemptChecked(attemptDto);
+        attemptChecked.setUzer(user);
+        attemptChecked.setCorrect(isCorrect);
+        AttemptChecked storedAttemptChecked = attemptRepository.save(attemptChecked);
 
         //Send the challengeAttempt to the Leaderboardservice
-        sentCheckedAttempt(storedAttempt);
+        sentCheckedAttempt(storedAttemptChecked);
 
-        return storedAttempt;
+        return storedAttemptChecked;
     }
 
     @Override
-    public List<Attempt> getUserStats(String alias) {
-
-        return attemptRepository.findTop10ByUzerAliasOrderByIdDesc(alias);
+    public List<AttemptDtoChecked> getUserStats(String alias) {
+       return sourceDestinationMapper
+               .attemptsCheckedToAttemptsCheckedDto(attemptRepository.findTop10ByUzerAliasOrderByIdDesc(alias));
     }
 
-    private void sentCheckedAttempt(Attempt attempt) {
-        AttemptCheckedDto attemptCheckedDto = sourceDestinationMapper.attemptToAttemptCheckedDto(attempt);
+    private void sentCheckedAttempt(AttemptChecked attemptChecked) {
+        AttemptDtoChecked attemptDtoChecked = sourceDestinationMapper.attempCheckedToAttemptDtoChecked(attemptChecked);
 
-        var isSuccessful = gamificationServiceClient.sendAttempt(attemptCheckedDto);
+        var isSuccessful = gamificationServiceClient.sendAttempt(attemptDtoChecked);
         if(isSuccessful){
             log.info("Successfully sent the challenge attempt to the LeaderBoardService");
         } else {
             log.info("There was an error sending the challenge attempt to the LeaderBoardService");
         }
-
     }
-
-
 }

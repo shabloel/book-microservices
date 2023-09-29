@@ -23,6 +23,7 @@ public class UserController {
 
     @GetMapping("/{idList}")
     public List<Uzer> getUsersByIdList(@PathVariable final List<Long> idList) {
+        log.info("Get request received for a list of users");
         return userRepository.findAllByIdIn(idList);
     }
 }

@@ -1,8 +1,6 @@
 package com.games.multiplication.serviceclient;
 
-import com.games.multiplication.domain.dto.AttemptCheckedDto;
-import com.games.multiplication.domain.dto.AttemptDTO;
-import com.games.multiplication.domain.model.Attempt;
+import com.games.multiplication.domain.dto.AttemptDtoChecked;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -26,7 +24,7 @@ public class GamificationServiceClient {
         this.gamificationHostUrl = gamificationHostUrl;
     }
 
-    public boolean sendAttempt(final AttemptCheckedDto attempt){
+    public boolean sendAttempt(final AttemptDtoChecked attempt){
         try {
             ResponseEntity<String> response = restTemplate.postForEntity(
                     gamificationHostUrl + "/attempts",

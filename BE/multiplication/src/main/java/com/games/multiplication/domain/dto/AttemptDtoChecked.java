@@ -3,7 +3,7 @@ package com.games.multiplication.domain.dto;
 import lombok.Value;
 
 @Value
-public class AttemptCheckedDto {
+public class AttemptDtoChecked {
     private Long id;
     private int factorA;
     private int factorB;

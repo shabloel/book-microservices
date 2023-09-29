@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Entity
 @Data
 @JsonIgnoreProperties({"HibernateLazyInitializer", "handler"})
-public class Attempt implements Serializable {
+public class AttemptChecked implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

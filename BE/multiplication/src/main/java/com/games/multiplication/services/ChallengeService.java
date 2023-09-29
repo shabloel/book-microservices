@@ -1,6 +1,7 @@
 package com.games.multiplication.services;
 
-import com.games.multiplication.domain.model.Attempt;
+import com.games.multiplication.domain.dto.AttemptDtoChecked;
+import com.games.multiplication.domain.model.AttemptChecked;
 import com.games.multiplication.domain.dto.AttemptDTO;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public interface ChallengeService {
      * @param resultAttempt
      * @return ChallengeAttempt
      */
-    Attempt verifyAttempt(AttemptDTO resultAttempt);
+    AttemptChecked verifyAttempt(AttemptDTO resultAttempt);
 
-    List<Attempt> getUserStats(String alias);
+    List<AttemptDtoChecked> getUserStats(String alias);
 }

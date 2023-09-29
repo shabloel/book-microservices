@@ -1,8 +1,8 @@
 package com.games.multiplication.services;
 
-import com.games.multiplication.domain.dto.AttemptCheckedDto;
+import com.games.multiplication.domain.dto.AttemptDtoChecked;
 import com.games.multiplication.domain.dto.AttemptDTO;
-import com.games.multiplication.domain.model.Attempt;
+import com.games.multiplication.domain.model.AttemptChecked;
 import com.games.multiplication.domain.model.Uzer;
 import com.games.multiplication.repos.AttemptRepository;
 import com.games.multiplication.repos.UserRepository;
@@ -49,21 +49,20 @@ class ChallengeServiceImplTest {
 
         //given
         Uzer existingUzer = new Uzer(1L, "Henkie");
-        AttemptDTO attemptDTO =
-                new AttemptDTO(12, 12, "Henkie", 144);
-        Attempt attempt = new Attempt(1L, existingUzer, 12, 12, 144, true);
-        given(attemptRepository.save(any())).willReturn(attempt);
-        given(sourceDestinationMapper.attemptDtoToAttemptEntity(any())).willReturn(attempt);
+        AttemptDTO attemptDTO = new AttemptDTO(12, 12, "Henkie", 144);
+        AttemptChecked attemptChecked = new AttemptChecked(1L, existingUzer, 12, 12, 144, true);
+        AttemptDtoChecked attemptDtoChecked = new AttemptDtoChecked(1L, 12, 12, 1L, "Henkie", true);
+        given(attemptRepository.save(any())).willReturn(attemptChecked);
+        given(sourceDestinationMapper.attemptDtoToAttemptChecked(any())).willReturn(attemptChecked);
+        given(sourceDestinationMapper.attempCheckedToAttemptDtoChecked(any())).willReturn(attemptDtoChecked);
         //when
-        Attempt result = classUnderTest.verifyAttempt(attemptDTO);
-
-        AttemptCheckedDto attemptCheckedDto = sourceDestinationMapper.attemptToAttemptCheckedDto(attempt);
+        AttemptChecked result = classUnderTest.verifyAttempt(attemptDTO);
 
         //then
         then(result.isCorrect()).isTrue();
         verify(userRepository).save(new Uzer("Henkie"));
         verify(attemptRepository).save(any());
-        verify(gamificationServiceClient).sendAttempt(attemptCheckedDto);
+        verify(gamificationServiceClient).sendAttempt(attemptDtoChecked);
     }
 
     @Test
@@ -73,13 +72,13 @@ class ChallengeServiceImplTest {
         Uzer existingUzer = new Uzer(1L, "Henkie");
         AttemptDTO attemptDTO =
                 new AttemptDTO(12, 12, "Henkie", 112);
-        Attempt attempt = new Attempt(1L, existingUzer, 12, 12, 144, true);
+        AttemptChecked attemptChecked = new AttemptChecked(1L, existingUzer, 12, 12, 144, true);
 
-        given(sourceDestinationMapper.attemptDtoToAttemptEntity(any())).willReturn(attempt);
-        given(attemptRepository.save(any())).willReturn(attempt);
+        given(sourceDestinationMapper.attemptDtoToAttemptChecked(any())).willReturn(attemptChecked);
+        given(attemptRepository.save(any())).willReturn(attemptChecked);
 
         //when
-        Attempt result = classUnderTest.verifyAttempt(attemptDTO);
+        AttemptChecked result = classUnderTest.verifyAttempt(attemptDTO);
 
         //then
         then(result.isCorrect()).isFalse();
@@ -91,15 +90,15 @@ class ChallengeServiceImplTest {
     void checkExistingUserTest() {
         //given
         Uzer existingUzer = new Uzer(1L, "Henkie");
-        Attempt attempt = new Attempt(1L, existingUzer, 12, 12, 144, true);
-        given(attemptRepository.save(any())).willReturn(attempt);
-        given(sourceDestinationMapper.attemptDtoToAttemptEntity(any())).willReturn(attempt);
+        AttemptChecked attemptChecked = new AttemptChecked(1L, existingUzer, 12, 12, 144, true);
+        given(attemptRepository.save(any())).willReturn(attemptChecked);
+        given(sourceDestinationMapper.attemptDtoToAttemptChecked(any())).willReturn(attemptChecked);
         given(userRepository.findByAlias("Henkie")).willReturn(Optional.of(existingUzer));
         AttemptDTO attemptDTO = new AttemptDTO(12, 12, "Henkie", 144);
 
 
         //when
-        Attempt result = classUnderTest.verifyAttempt(attemptDTO);
+        AttemptChecked result = classUnderTest.verifyAttempt(attemptDTO);
 
         //then
         then(result.isCorrect()).isTrue();
@@ -113,15 +112,19 @@ class ChallengeServiceImplTest {
     void getLatestTenAttempts() {
         //given
         Uzer uzer = new Uzer(1L, "Henkie");
-        Attempt attempt1 = new Attempt(1L, uzer, 12, 12, 144, false);
-        Attempt attempt2 = new Attempt(1L, uzer, 12, 12, 144, false);
-        List<Attempt> listAttempts = List.of(attempt1, attempt2);
-        given(attemptRepository.findTop10ByUzerAliasOrderByIdDesc("Henkie")).willReturn(listAttempts);
+        AttemptChecked attemptChecked1 = new AttemptChecked(1L, null, 12, 12, 12, false);
+        AttemptChecked attemptChecked2 = new AttemptChecked(1L, null, 12, 12, 144, true);
+        List<AttemptChecked> listAttemptChecked = List.of(attemptChecked1, attemptChecked2);
 
+        AttemptDtoChecked attemptDtoChecked1 = new AttemptDtoChecked(1L, 12, 12, 1L, "Henkie", false);
+        AttemptDtoChecked attemptDtoChecked2 = new AttemptDtoChecked(1L, 12, 12, 2L, "Kees", true);
+        List<AttemptDtoChecked> listAttemptDtoChecked = List.of(attemptDtoChecked1, attemptDtoChecked2);
+        given(attemptRepository.findTop10ByUzerAliasOrderByIdDesc("Henkie")).willReturn(listAttemptChecked);
+        given(sourceDestinationMapper.attemptsCheckedToAttemptsCheckedDto(any())).willReturn(listAttemptDtoChecked);
         //when
-        List<Attempt> result = classUnderTest.getUserStats("Henkie");
+        List<AttemptDtoChecked> result = classUnderTest.getUserStats("Henkie");
 
         //then
-        then(result).isEqualTo(listAttempts);
+        then(result).isEqualTo(listAttemptDtoChecked);
     }
 }

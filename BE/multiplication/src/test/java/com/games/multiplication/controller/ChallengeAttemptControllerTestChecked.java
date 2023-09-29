@@ -1,7 +1,7 @@
 package com.games.multiplication.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.games.multiplication.domain.model.Attempt;
+import com.games.multiplication.domain.model.AttemptChecked;
 import com.games.multiplication.domain.dto.AttemptDTO;
 import com.games.multiplication.domain.model.Uzer;
 import com.games.multiplication.services.ChallengeService;
@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @AutoConfigureJsonTesters
 @WebMvcTest(ChallengeAttemptController.class)
 @AutoConfigureMockMvc
-class ChallengeAttemptControllerTest {
+class ChallengeAttemptControllerTestChecked {
 
     @MockBean
     private ChallengeService challengeService;
@@ -41,7 +41,7 @@ class ChallengeAttemptControllerTest {
     private JacksonTester<AttemptDTO> jsonRequestAttempt;
 
     @Autowired
-    private JacksonTester<Attempt> jsonChallengeAttempt;
+    private JacksonTester<AttemptChecked> jsonChallengeAttempt;
 
 
     @BeforeEach
@@ -56,15 +56,15 @@ class ChallengeAttemptControllerTest {
         AttemptDTO attemptDTO =
                 new AttemptDTO(12, 12, "Henkie", 144);
 
-        Attempt attempt =
-                new Attempt(1L, user, 12, 12, 144, true);
+        AttemptChecked attemptChecked =
+                new AttemptChecked(1L, user, 12, 12, 144, true);
 
         ObjectMapper objectMapper = new ObjectMapper();
         String requestBody = objectMapper.writeValueAsString(attemptDTO);
 
 
         //when
-        when(challengeService.verifyAttempt(any())).thenReturn(attempt);
+        when(challengeService.verifyAttempt(any())).thenReturn(attemptChecked);
 
         MockHttpServletResponse response = mockMvc.perform(
                 post("/attempts")
@@ -75,7 +75,7 @@ class ChallengeAttemptControllerTest {
 
         //then
         then(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-        then(response.getContentAsString()).isEqualTo(jsonChallengeAttempt.write(attempt).getJson());
+        then(response.getContentAsString()).isEqualTo(jsonChallengeAttempt.write(attemptChecked).getJson());
     }
 
     @Test
