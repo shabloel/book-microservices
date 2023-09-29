@@ -7,3 +7,18 @@ mat-header-cel {
   justify-content: center; /* Horizontally center */
   margin-top: 20rem;
 }
+
+h3 {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.stats-table {
+  background-color: rgb(240, 248, 248);
+}

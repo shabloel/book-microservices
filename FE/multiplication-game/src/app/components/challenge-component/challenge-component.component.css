@@ -1,9 +1,3 @@
-/* .container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-} */
-
 .main {
   display: flex;
   flex-direction: column;
@@ -38,12 +32,12 @@
 }
 
 .challenge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: indianred;
   margin-top: 1rem;
   margin-bottom: 1rem;
-}
-
-.challenge {
-  background-color: indianred;
 }
 
 h4 {

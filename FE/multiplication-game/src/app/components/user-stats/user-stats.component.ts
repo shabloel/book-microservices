@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { ChallengeAttempt } from 'src/app/dtos/challenge-attempt';
+import { AttemptDtoChecked } from 'src/app/dtos/attempt-dto-checked';
 import { ChallengeServiceService } from 'src/app/core/http/challenge-service.service';
 import { ObservablesService } from 'src/app/services/observables.service';
 
@@ -13,10 +13,10 @@ import { ObservablesService } from 'src/app/services/observables.service';
 export class UserStatsComponent implements OnInit {
   pageSize = 5;
   pageSizeOptions: number[] = [5, 10, 25, 50];
-  dataSource: MatTableDataSource<ChallengeAttempt>;
+  dataSource: MatTableDataSource<AttemptDtoChecked>;
   columnsToDisplay = ['Challenge', 'Your guess', 'Result'];
-  challengeAttempt: ChallengeAttempt;
-  attempts: ChallengeAttempt[];
+  attemptDtoChecked: AttemptDtoChecked;
+  attemptsThatAreChecked: AttemptDtoChecked[];
 
   @ViewChild('paginator') paginator!: MatPaginator;
 
@@ -34,9 +34,9 @@ export class UserStatsComponent implements OnInit {
       if (challengeAttempt.userAlias) {
         this.challengeService.getAttempts(challengeAttempt.userAlias).subscribe(
           (result) => {
-            this.attempts = result;
-            this.dataSource = new MatTableDataSource<ChallengeAttempt>(
-              this.attempts
+            this.attemptsThatAreChecked = result;
+            this.dataSource = new MatTableDataSource<AttemptDtoChecked>(
+              this.attemptsThatAreChecked
             );
             this.dataSource.paginator = this.paginator;
           },

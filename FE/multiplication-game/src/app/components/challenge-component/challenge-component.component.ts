@@ -5,7 +5,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable, Subject, concatMap, tap } from 'rxjs';
 import { Challenge } from 'src/app/dtos/challenge';
-import { ChallengeAttempt } from 'src/app/dtos/challenge-attempt';
+import { AttemptDtoChecked } from 'src/app/dtos/attempt-dto-checked';
 import { AttemptDto } from 'src/app/dtos/attempt-dto';
 import { ChallengeServiceService } from 'src/app/core/http/challenge-service.service';
 import { ObservablesService } from 'src/app/services/observables.service';
@@ -22,7 +22,7 @@ export class ChallengeComponentComponent implements OnInit {
   loading = false;
   success = false;
   message: string;
-  challengeAttempt: ChallengeAttempt;
+  attemptDtoChecked: AttemptDtoChecked;
 
   constructor(
     private challengeService: ChallengeServiceService,
@@ -40,16 +40,17 @@ export class ChallengeComponentComponent implements OnInit {
   async submitChallenge() {
     this.loading = true;
     const challengeAttempt = this.createChallengeAttempt();
+    console.log('challenge attempt ', challengeAttempt);
     this.sentChallenge(challengeAttempt);
     this.loading = false;
   }
 
-  private sentChallenge(challengeAttempt: AttemptDto) {
+  private sentChallenge(attemptDto: AttemptDto) {
     this.challengeService
-      .sendChallenge(challengeAttempt)
+      .sendChallenge(attemptDto)
       .pipe(
         tap((result) => {
-          this.challengeAttempt = result;
+          this.attemptDtoChecked = result;
           if (result.correct) {
             this.updateMessage('Congratulations, your guess is correct!');
           } else {
@@ -58,9 +59,7 @@ export class ChallengeComponentComponent implements OnInit {
         })
       )
       .subscribe(() => {
-        this.observableService.sentChallengeAttemptToUserStats(
-          challengeAttempt
-        );
+        this.observableService.sentChallengeAttemptToUserStats(attemptDto);
         this.getChallenge();
         this.clearInputFieldGuess();
       });
@@ -84,7 +83,7 @@ export class ChallengeComponentComponent implements OnInit {
     const challengeAttempt = new AttemptDto();
     challengeAttempt.factorA = this.challenge.factorA;
     challengeAttempt.factorB = this.challenge.factorB;
-    challengeAttempt.guess = formValue.guess;
+    challengeAttempt.userGuess = formValue.guess;
     challengeAttempt.userAlias = formValue.alias;
     return challengeAttempt;
   }

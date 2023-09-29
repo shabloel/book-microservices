@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
-import { ChallengeAttempt } from '../dtos/challenge-attempt';
+import { AttemptDto } from '../dtos/attempt-dto';
 import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ObservablesService {
-  private dataSubject: Subject<ChallengeAttempt> = new Subject<any>();
+  private dataSubject: Subject<AttemptDto> = new Subject<any>();
   public data$ = this.dataSubject.asObservable();
 
-  sentChallengeAttemptToUserStats(data: ChallengeAttempt) {
+  sentChallengeAttemptToUserStats(data: AttemptDto) {
     this.dataSubject.next(data);
   }
 

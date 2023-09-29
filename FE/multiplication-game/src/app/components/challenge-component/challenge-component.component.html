@@ -19,7 +19,7 @@
           </mat-error>
         </mat-form-field>
         <div class="challenge">
-          <h6 *ngIf="haveChallenge">New challenge</h6>
+          <h5 *ngIf="haveChallenge">New challenge</h5>
           <p *ngIf="haveChallenge; else elseBlock">
             {{ challenge.factorA }} x {{ challenge.factorB }}
           </p>

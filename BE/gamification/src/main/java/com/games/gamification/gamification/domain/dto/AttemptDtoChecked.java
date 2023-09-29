@@ -11,4 +11,5 @@ public class AttemptDtoChecked {
     private int factorB;
     private long userId;
     private String userAlias;
+    private long userGuess;
 }

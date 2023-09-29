@@ -51,7 +51,7 @@ class ChallengeServiceImplTest {
         Uzer existingUzer = new Uzer(1L, "Henkie");
         AttemptDTO attemptDTO = new AttemptDTO(12, 12, "Henkie", 144);
         AttemptChecked attemptChecked = new AttemptChecked(1L, existingUzer, 12, 12, 144, true);
-        AttemptDtoChecked attemptDtoChecked = new AttemptDtoChecked(1L, 12, 12, 1L, "Henkie", true);
+        AttemptDtoChecked attemptDtoChecked = new AttemptDtoChecked(1L, 12, 12, 1L, "Henkie", true, 144);
         given(attemptRepository.save(any())).willReturn(attemptChecked);
         given(sourceDestinationMapper.attemptDtoToAttemptChecked(any())).willReturn(attemptChecked);
         given(sourceDestinationMapper.attempCheckedToAttemptDtoChecked(any())).willReturn(attemptDtoChecked);
@@ -116,8 +116,8 @@ class ChallengeServiceImplTest {
         AttemptChecked attemptChecked2 = new AttemptChecked(1L, null, 12, 12, 144, true);
         List<AttemptChecked> listAttemptChecked = List.of(attemptChecked1, attemptChecked2);
 
-        AttemptDtoChecked attemptDtoChecked1 = new AttemptDtoChecked(1L, 12, 12, 1L, "Henkie", false);
-        AttemptDtoChecked attemptDtoChecked2 = new AttemptDtoChecked(1L, 12, 12, 2L, "Kees", true);
+        AttemptDtoChecked attemptDtoChecked1 = new AttemptDtoChecked(1L, 12, 12, 1L, "Henkie", false, 12);
+        AttemptDtoChecked attemptDtoChecked2 = new AttemptDtoChecked(1L, 12, 12, 2L, "Kees", true, 144);
         List<AttemptDtoChecked> listAttemptDtoChecked = List.of(attemptDtoChecked1, attemptDtoChecked2);
         given(attemptRepository.findTop10ByUzerAliasOrderByIdDesc("Henkie")).willReturn(listAttemptChecked);
         given(sourceDestinationMapper.attemptsCheckedToAttemptsCheckedDto(any())).willReturn(listAttemptDtoChecked);

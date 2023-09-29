@@ -10,4 +10,5 @@ public class AttemptDtoChecked {
     private Long userId;
     private String userAlias;
     private boolean correct;
+    private int userGuess;
 }

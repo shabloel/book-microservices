@@ -15,10 +15,10 @@ export class ChallengeServiceService {
 
   constructor(private httpClient: HttpClient) {}
 
-  sendChallenge(challengeAttempt: AttemptDto): Observable<any> {
+  sendChallenge(attemptDto: AttemptDto): Observable<any> {
     return this.httpClient.post(
       this.SERVER_URL + this.POST_CHALLENGE_URL,
-      challengeAttempt
+      attemptDto
     );
   }
 

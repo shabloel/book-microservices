@@ -11,7 +11,7 @@ export class LeaderBoardService {
 
   constructor(private httpClient: HttpClient) {}
 
-  getChallenge(): Observable<any> {
+  getLeaderBoard(): Observable<any> {
     return this.httpClient.get(this.SERVER_URL + this.GET_LEADERBOARD);
   }
 }

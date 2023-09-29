@@ -3,3 +3,26 @@
   justify-content: center; /* Horizontally center */
   margin-top: 20rem;
 }
+
+h3 {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.leaderboard-table {
+  background-color: rgb(240, 248, 248);
+}
+
+.badge {
+  font-size: x-small;
+  border: 2px solid dodgerblue;
+  border-radius: 4px;
+  padding: 0.2em;
+  margin: 0.1em;
+}

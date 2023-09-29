@@ -22,7 +22,7 @@ public class LeaderBoardController {
 
     @GetMapping
     public List<LeaderBoardRow> getLeaderBoard(){
-        log.info("Get request reveiced to /leaders/");
+        log.info("Get request reveiced to /leaders/ {}", leaderBoardService.getCurrentLeaderBoard());
         return leaderBoardService.getCurrentLeaderBoard();
     }
 
