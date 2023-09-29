@@ -1,9 +1,9 @@
-package com.games.gamification.gamification.domain.model;
+package com.games.gamification.gamification.domain.dto;
 
 import lombok.Value;
 
 @Value
-public class ChallengeAttempt {
+public class AttemptDtoChecked {
 
     private long id;
     private boolean correct;

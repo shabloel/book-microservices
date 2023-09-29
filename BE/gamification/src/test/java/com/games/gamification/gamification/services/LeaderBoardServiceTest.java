@@ -1,8 +1,8 @@
 package com.games.gamification.gamification.services;
 
+import com.games.gamification.gamification.domain.dto.LeaderBoardRow;
 import com.games.gamification.gamification.domain.model.BadgeCard;
 import com.games.gamification.gamification.domain.model.BadgeType;
-import com.games.gamification.gamification.domain.dto.LeaderBoardRow;
 import com.games.gamification.gamification.repositories.BadgeRepo;
 import com.games.gamification.gamification.repositories.ScoreCardRepo;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +13,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
