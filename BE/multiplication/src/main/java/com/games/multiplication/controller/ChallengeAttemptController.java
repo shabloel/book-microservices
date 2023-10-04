@@ -1,7 +1,7 @@
 package com.games.multiplication.controller;
 
+import com.games.multiplication.domain.dto.AttemptCheckedEvent;
 import com.games.multiplication.domain.dto.AttemptDTO;
-import com.games.multiplication.domain.dto.AttemptDtoChecked;
 import com.games.multiplication.domain.model.AttemptChecked;
 import com.games.multiplication.services.ChallengeService;
 import jakarta.validation.Valid;
@@ -30,7 +30,7 @@ public class ChallengeAttemptController {
     }
 
     @GetMapping
-    ResponseEntity<List<AttemptDtoChecked>> getUserStats(@RequestParam("alias") String alias) {
+    ResponseEntity<List<AttemptCheckedEvent>> getUserStats(@RequestParam("alias") String alias) {
         log.info("Get request received for the last 10 attempts for usr [{}]", alias);
         return ResponseEntity.ok(challengeService.getUserStats(alias));
     }

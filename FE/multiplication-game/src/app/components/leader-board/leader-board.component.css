@@ -1,7 +1,7 @@
 .message {
   display: flex;
-  justify-content: center; /* Horizontally center */
   margin-top: 20rem;
+  margin-left: 1rem;
 }
 
 h3 {

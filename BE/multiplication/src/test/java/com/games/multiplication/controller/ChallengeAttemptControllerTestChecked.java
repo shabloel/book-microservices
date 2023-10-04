@@ -1,8 +1,8 @@
 package com.games.multiplication.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.games.multiplication.domain.model.AttemptChecked;
 import com.games.multiplication.domain.dto.AttemptDTO;
+import com.games.multiplication.domain.model.AttemptChecked;
 import com.games.multiplication.domain.model.Uzer;
 import com.games.multiplication.services.ChallengeService;
 import org.junit.jupiter.api.BeforeEach;
@@ -67,9 +67,9 @@ class ChallengeAttemptControllerTestChecked {
         when(challengeService.verifyAttempt(any())).thenReturn(attemptChecked);
 
         MockHttpServletResponse response = mockMvc.perform(
-                post("/attempts")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody))
+                        post("/attempts")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestBody))
                 .andReturn()
                 .getResponse();
 

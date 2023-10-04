@@ -13,12 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class ChallengeController {
 
     private final ChallengeGeneratorService challengeGeneratorService;
+
     public ChallengeController(ChallengeGeneratorService challengeGeneratorService) {
         this.challengeGeneratorService = challengeGeneratorService;
     }
 
     @GetMapping("/random")
-    public Challenge getChallenge(){
+    public Challenge getChallenge() {
         log.info("Received GET request to /challenges, and returning a random challenge");
         return challengeGeneratorService.randomChallenge();
     }

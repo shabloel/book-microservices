@@ -1,4 +1,4 @@
-<div class="container" *ngIf="dataSource; else elseBlock">
+<div class="container" *ngIf="!serverError; else elseBlock">
   <h3><b>Leaderboard</b></h3>
   <mat-table [dataSource]="dataSource" class="leaderboard-table">
     <ng-container matColumnDef="User">
@@ -26,5 +26,7 @@
 </div>
 
 <ng-template #elseBlock>
-  <p class="message"><b>There is no leaderboard yet</b></p>
+  <p class="message">
+    <b>We're sorry, we can't display game statistics at this moment.</b>
+  </p>
 </ng-template>

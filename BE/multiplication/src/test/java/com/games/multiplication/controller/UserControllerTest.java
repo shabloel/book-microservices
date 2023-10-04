@@ -14,12 +14,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.mockito.BDDMockito.given;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-
-import java.util.List;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureJsonTesters
