@@ -1,6 +1,6 @@
 package com.games.gamification.gamification.services;
 
-import com.games.gamification.gamification.domain.dto.AttemptDtoChecked;
+import com.games.gamification.gamification.domain.dto.AttemptCheckedEvent;
 import com.games.gamification.gamification.domain.model.BadgeCard;
 import com.games.gamification.gamification.domain.model.BadgeType;
 import com.games.gamification.gamification.domain.model.ScoreCard;
@@ -54,8 +54,8 @@ class GameServiceTest {
         //given
         Long userId = 1L, attemptId = 1L;
         String userAlias = "Henk";
-        var attempt = new AttemptDtoChecked(
-                attemptId, true, 20, 70, userId, userAlias);
+        var attempt = new AttemptCheckedEvent(
+                attemptId, true, 20, 70, userId, userAlias, 1400);
         ScoreCard scoreCard = new ScoreCard(userId, attemptId);
 
         //when
@@ -78,8 +78,8 @@ class GameServiceTest {
         //given
         Long userId = 1L, attemptId = 1L;
         String userAlias = "Henk";
-        var attempt = new AttemptDtoChecked(
-                attemptId, false, 20, 70, userId, userAlias);
+        var attempt = new AttemptCheckedEvent(
+                attemptId, false, 20, 70, userId, userAlias, 1400);
         Optional<GameService.GameResult> result = classUnderTest.newAttemptFromUser(attempt);
         then(result).isEqualTo(Optional.of(new GameService.GameResult(0, List.of())));
     }

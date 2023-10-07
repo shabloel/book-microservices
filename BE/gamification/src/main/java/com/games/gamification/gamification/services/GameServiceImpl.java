@@ -1,6 +1,6 @@
 package com.games.gamification.gamification.services;
 
-import com.games.gamification.gamification.domain.dto.AttemptDtoChecked;
+import com.games.gamification.gamification.domain.dto.AttemptCheckedEvent;
 import com.games.gamification.gamification.domain.model.BadgeCard;
 import com.games.gamification.gamification.domain.model.BadgeType;
 import com.games.gamification.gamification.domain.model.ScoreCard;
@@ -31,7 +31,7 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public Optional<GameResult> newAttemptFromUser(final AttemptDtoChecked attemptChecked) {
+    public Optional<GameResult> newAttemptFromUser(final AttemptCheckedEvent attemptChecked) {
         if (attemptChecked == null) {
             return Optional.empty();
         }
@@ -59,7 +59,7 @@ public class GameServiceImpl implements GameService {
         }
     }
 
-    private List<BadgeCard> processForBadges(AttemptDtoChecked attempt) {
+    private List<BadgeCard> processForBadges(AttemptCheckedEvent attempt) {
 
         Optional<Integer> optTotalScore = scoreCardRepo.getTotalScoreForUser(attempt.getUserId());
 

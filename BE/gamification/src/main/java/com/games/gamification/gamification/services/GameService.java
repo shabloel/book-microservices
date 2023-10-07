@@ -1,6 +1,6 @@
 package com.games.gamification.gamification.services;
 
-import com.games.gamification.gamification.domain.dto.AttemptDtoChecked;
+import com.games.gamification.gamification.domain.dto.AttemptCheckedEvent;
 import com.games.gamification.gamification.domain.model.BadgeType;
 import lombok.Value;
 
@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface GameService {
 
-    Optional<GameResult> newAttemptFromUser(AttemptDtoChecked challenge);
+    Optional<GameResult> newAttemptFromUser(AttemptCheckedEvent challenge);
 
     @Value
     class GameResult {

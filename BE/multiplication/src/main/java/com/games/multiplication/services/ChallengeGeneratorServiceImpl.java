@@ -9,9 +9,8 @@ import java.util.Random;
 public class ChallengeGeneratorServiceImpl implements ChallengeGeneratorService {
 
     private final Random random;
-
-    private static final int MINIMUM_FACTOR = 11;
-    private static final int MAXIMUM_FACTOR = 99;
+    private static final int MINIMUM_FACTOR = 1;
+    private static final int MAXIMUM_FACTOR = 20;
 
     public ChallengeGeneratorServiceImpl() {
         this.random = new Random();

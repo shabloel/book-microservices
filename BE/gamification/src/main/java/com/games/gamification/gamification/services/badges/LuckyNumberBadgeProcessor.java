@@ -1,6 +1,6 @@
 package com.games.gamification.gamification.services.badges;
 
-import com.games.gamification.gamification.domain.dto.AttemptDtoChecked;
+import com.games.gamification.gamification.domain.dto.AttemptCheckedEvent;
 import com.games.gamification.gamification.domain.model.BadgeType;
 import com.games.gamification.gamification.domain.model.ScoreCard;
 
@@ -11,7 +11,7 @@ public class LuckyNumberBadgeProcessor implements BadgeProcessor {
     @Override
     public Optional<BadgeType> processForOptionalBadge(int currentScore,
                                                        List<ScoreCard> scoreCards,
-                                                       AttemptDtoChecked challenge) {
+                                                       AttemptCheckedEvent challenge) {
         return (challenge.getFactorA() == 42 || challenge.getFactorB() == 42) ?
                 Optional.of(BadgeType.LUCKY_NUMBER) : Optional.empty();
     }
