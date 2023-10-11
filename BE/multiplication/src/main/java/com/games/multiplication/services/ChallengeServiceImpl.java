@@ -8,6 +8,7 @@ import com.games.multiplication.events.ChallengeEventPub;
 import com.games.multiplication.repos.AttemptRepository;
 import com.games.multiplication.repos.UserRepository;
 import com.games.multiplication.services.mapper.SourceDestinationMapper;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +33,7 @@ public class ChallengeServiceImpl implements ChallengeService {
         this.sourceDestinationMapper = sourceDestinationMapper;
     }
 
+    @Transactional
     @Override
     public AttemptChecked verifyAttempt(AttemptDTO attemptDto) {
 

@@ -7,6 +7,7 @@ import com.games.gamification.gamification.domain.model.ScoreCard;
 import com.games.gamification.gamification.repositories.BadgeRepo;
 import com.games.gamification.gamification.repositories.ScoreCardRepo;
 import com.games.gamification.gamification.services.badges.BadgeProcessor;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +32,7 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
+    @Transactional
     public Optional<GameResult> newAttemptFromUser(final AttemptCheckedEvent attemptChecked) {
         if (attemptChecked == null) {
             return Optional.empty();
