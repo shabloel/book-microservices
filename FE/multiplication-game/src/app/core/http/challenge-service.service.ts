@@ -7,7 +7,7 @@ import { AttemptDto } from 'src/app/dtos/attempt-dto';
   providedIn: 'root',
 })
 export class ChallengeServiceService {
-  SERVER_URL = `http://localhost:8090`;
+  SERVER_URL = `http://localhost:8000`;
   POST_CHALLENGE_URL = `/attempts`;
   GET_CHALLENGE_URL = `/challenges/random`;
   GET_ATTEMPTS_BY_ALIAS = `/attempts?alias=`;
