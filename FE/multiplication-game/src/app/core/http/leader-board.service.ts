@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class LeaderBoardService {
-  SERVER_URL: string = `http://localhost:8081`;
+  SERVER_URL: string = `http://localhost:8082`;
   GET_LEADERBOARD: string = `/leaders`;
 
   constructor(private httpClient: HttpClient) {}
